@@ -19,10 +19,10 @@ namespace DotNetARX
         public static Matrix3d Wcs2Dcs(this AbstractViewTableRecord vtr)
         {
             //获取视图或视口平面到世界坐标系转换矩阵
-            Matrix3d mat = Matrix3d.PlaneToWorld(vtr.ViewDirection);
-            //将平移过的视口或视图回复到原始状态所需要的矩阵
+            var mat = Matrix3d.PlaneToWorld(vtr.ViewDirection);
+            //将平移过的视口或视图 恢复 到原始状态所需要的矩阵
             mat = Matrix3d.Displacement(vtr.Target - Point3d.Origin) * mat;
-            //将旋转过的视口或视图回复到原始状态所需要的矩阵
+            //将旋转过的视口或视图 恢复 到原始状态所需要的矩阵
             mat = Matrix3d.Rotation(-vtr.ViewTwist, vtr.ViewDirection, vtr.Target) * mat;
             return mat.Inverse();//将矩阵进行转置
         }
@@ -41,7 +41,7 @@ namespace DotNetARX
             Document doc = ed.Document;
             Database db = doc.Database;
             int cvport = Convert.ToInt32(Application.GetSystemVariable("CVPORT"));
-            if (db.TileMode == true)
+            if (db.TileMode)
             {
                 if (ptMin.Equals(Point3d.Origin) == true && ptMax.Equals(Point3d.Origin) == true)
                 {
@@ -97,15 +97,16 @@ namespace DotNetARX
                 }
                 else
                 {
-                    width = extents.MaxPoint.X - extents.MinPoint.X;
-                    height = extents.MaxPoint.Y - extents.MinPoint.Y;
+                    width     = extents.MaxPoint.X - extents.MinPoint.X;
+                    height    = extents.MaxPoint.Y - extents.MinPoint.Y;
                     newCenter = new Point2d((extents.MaxPoint.X + extents.MinPoint.X) * 0.5, (extents.MaxPoint.Y + extents.MinPoint.Y) * 0.5);
                 }
-                if (width > height * viewRatio) height = width / viewRatio;
+                if (width > height * viewRatio)
+                    height = width / viewRatio;
                 if (factor != 0)
                 {
                     view.Height = height * factor;
-                    view.Width = width * factor;
+                    view.Width  = width * factor;
                 }
                 view.CenterPoint = newCenter;
                 ed.SetCurrentView(view);
@@ -165,9 +166,9 @@ namespace DotNetARX
             //根据当前图形的界限范围对视图进行缩放
             if (db.Extmax.X < db.Extmin.X)
             {
-                Plane plane = new Plane();
-                Point3d pt1 = new Point3d(plane, db.Limmin);
-                Point3d pt2 = new Point3d(plane, db.Limmax);
+                var plane = new Plane();
+                var pt1 = new Point3d(plane, db.Limmin);
+                var pt2 = new Point3d(plane, db.Limmax);
                 ed.ZoomWindow(pt1, pt2);
             }
             else
@@ -188,7 +189,8 @@ namespace DotNetARX
             {
                 //获取实体对象
                 Entity ent = trans.GetObject(entId, OpenMode.ForRead) as Entity;
-                if (ent == null) return;
+                if (ent == null)
+                    return;
                 //根据实体的范围对视图进行缩放
                 Extents3d ext = ent.GeometricExtents;
                 ext.TransformBy(ed.CurrentUserCoordinateSystem.Inverse());

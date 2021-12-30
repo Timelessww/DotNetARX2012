@@ -22,10 +22,8 @@ namespace DotNetARX
             if (!lt.Has(layerName))//如果不存在名为layerName的图层，则新建一个图层
             {
                 //定义一个新的层表记录
-                LayerTableRecord ltr = new LayerTableRecord
-                {
-                    Name = layerName//设置图层名
-                };
+                LayerTableRecord ltr=new LayerTableRecord();
+                ltr.Name = layerName;//设置图层名
                 lt.UpgradeOpen();//切换层表的状态为写以添加新的图层
                 //将层表记录的信息添加到层表中
                 lt.Add(ltr);

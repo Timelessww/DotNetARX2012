@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net35;net40</TargetFrameworks>
+        <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+        <Version></Version>
+        <Company>DotNetARX</Company>
+        <Authors></Authors>
+        <Description>基于.NET的Cad二次开发类库</Description>
+        <Copyright></Copyright>
+        <PackageProjectUrl></PackageProjectUrl>
+        <RepositoryUrl></RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>CAD;AutoCad;C#;NET</PackageTags>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <LangVersion>preview</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <!--<PackageLicenseFile></PackageLicenseFile>-->
+        <!--<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>-->
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'NET35'">
+        <PackageReference Include="JJBox.Acad2008" Version="1.0.0" ExcludeAssets="runtime" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'NET40'">
+        <PackageReference Include="JJBox.Acad2013" Version="1.0.0">
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </PackageReference>
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    </ItemGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'NET35'">
+        <DefineConstants>$(Configuration);ac2009</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'NET40'">
+        <DefineConstants>$(Configuration);ac2013</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+
+</Project>

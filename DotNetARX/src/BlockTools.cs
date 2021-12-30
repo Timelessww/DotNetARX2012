@@ -5,8 +5,9 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
+#if !NET35
 using Autodesk.AutoCAD.Internal;
-
+#endif
 namespace DotNetARX
 {
     /// <summary>
@@ -21,15 +22,15 @@ namespace DotNetARX
         /// <summary>
         /// 实数
         /// </summary>
-        Real = 40,
+        Real   = 40,
         /// <summary>
         /// 短整型
         /// </summary>
-        Short = 70,
+        Short  = 70,
         /// <summary>
         /// 长整型
         /// </summary>
-        Long = 90
+        Long   = 90
     }
 
     /// <summary>
@@ -52,13 +53,13 @@ namespace DotNetARX
             {
                 //创建一个BlockTableRecord类的对象，表示所要创建的块
                 BlockTableRecord btr = new BlockTableRecord();
-                btr.Name = blockName;//设置块名                
+                btr.Name = blockName;//设置块名
                 //将列表中的实体加入到新建的BlockTableRecord对象
                 ents.ForEach(ent => btr.AppendEntity(ent));
-                bt.UpgradeOpen();//切换块表为写的状态
-                bt.Add(btr);//在块表中加入blockName块
+                bt.UpgradeOpen();                                        //切换块表为写的状态
+                bt.Add(btr);                                             //在块表中加入blockName块
                 db.TransactionManager.AddNewlyCreatedDBObject(btr, true);//通知事务处理
-                bt.DowngradeOpen();//为了安全，将块表状态改为读
+                bt.DowngradeOpen();                                      //为了安全，将块表状态改为读
             }
             return bt[blockName];//返回块表记录的Id
         }
@@ -87,32 +88,35 @@ namespace DotNetARX
         /// <returns>返回块参照的Id</returns>
         public static ObjectId InsertBlockReference(this ObjectId spaceId, string layer, string blockName, Point3d position, Scale3d scale, double rotateAngle)
         {
-            ObjectId blockRefId;//存储要插入的块参照的Id
+            ObjectId blockRefId;           //存储要插入的块参照的Id
             Database db = spaceId.Database;//获取数据库对象
             //以读的方式打开块表
             BlockTable bt = (BlockTable)db.BlockTableId.GetObject(OpenMode.ForRead);
             //如果没有blockName表示的块，则程序返回
-            if (!bt.Has(blockName)) return ObjectId.Null;
+            if (!bt.Has(blockName))
+                return ObjectId.Null;
             //以写的方式打开空间（模型空间或图纸空间）
             BlockTableRecord space = (BlockTableRecord)spaceId.GetObject(OpenMode.ForWrite);
             //创建一个块参照并设置插入点
             BlockReference br = new BlockReference(position, bt[blockName]);
-            br.ScaleFactors = scale;//设置块参照的缩放比例
-            br.Layer = layer;//设置块参照的层名
-            br.Rotation = rotateAngle;//设置块参照的旋转角度
+            br.ScaleFactors = scale;       //设置块参照的缩放比例
+            br.Layer = layer;              //设置块参照的层名
+            br.Rotation = rotateAngle;     //设置块参照的旋转角度
             ObjectId btrId = bt[blockName];//获取块表记录的Id
             //打开块表记录
             BlockTableRecord record = (BlockTableRecord)btrId.GetObject(OpenMode.ForRead);
+#if !NET35
             //添加可缩放性支持
             if (record.Annotative == AnnotativeStates.True)
             {
-                ObjectContextCollection contextCollection = db.ObjectContextManager.GetContextCollection("ACDB_ANNOTATIONSCALES");
+                var contextCollection = db.ObjectContextManager.GetContextCollection("ACDB_ANNOTATIONSCALES");
                 ObjectContexts.AddContext(br, contextCollection.GetContext("1:1"));
             }
-            blockRefId = space.AppendEntity(br);//在空间中加入创建的块参照
+#endif
+            blockRefId = space.AppendEntity(br);                    //在空间中加入创建的块参照
             db.TransactionManager.AddNewlyCreatedDBObject(br, true);//通知事务处理加入创建的块参照
-            space.DowngradeOpen();//为了安全，将块表状态改为读
-            return blockRefId;//返回添加的块参照的Id
+            space.DowngradeOpen();                                  //为了安全，将块表状态改为读
+            return blockRefId;                                      //返回添加的块参照的Id
         }
 
         /// <summary>
@@ -132,7 +136,8 @@ namespace DotNetARX
             //以读的方式打开块表
             BlockTable bt = (BlockTable)db.BlockTableId.GetObject(OpenMode.ForRead);
             //如果没有blockName表示的块，则程序返回
-            if (!bt.Has(blockName)) return ObjectId.Null;
+            if (!bt.Has(blockName))
+                return ObjectId.Null;
             //以写的方式打开空间（模型空间或图纸空间）
             BlockTableRecord space = (BlockTableRecord)spaceId.GetObject(OpenMode.ForWrite);
             ObjectId btrId = bt[blockName];//获取块表记录的Id
@@ -140,10 +145,10 @@ namespace DotNetARX
             BlockTableRecord record = (BlockTableRecord)btrId.GetObject(OpenMode.ForRead);
             //创建一个块参照并设置插入点
             BlockReference br = new BlockReference(position, bt[blockName]);
-            br.ScaleFactors = scale;//设置块参照的缩放比例
-            br.Layer = layer;//设置块参照的层名
+            br.ScaleFactors = scale;  //设置块参照的缩放比例
+            br.Layer = layer;         //设置块参照的层名
             br.Rotation = rotateAngle;//设置块参照的旋转角度
-            space.AppendEntity(br);//为了安全，将块表状态改为读 
+            space.AppendEntity(br);   //为了安全，将块表状态改为读
             //判断块表记录是否包含属性定义
             if (record.HasAttributeDefinitions)
             {
@@ -223,7 +228,8 @@ namespace DotNetARX
             Editor ed = Application.DocumentManager.GetDocument(db).Editor;
             var entSelected = ed.SelectAll(filter);
             // 如果数据库不存在指定名称的块参照，则返回
-            if (entSelected.Status != PromptStatus.OK) return null;
+            if (entSelected.Status != PromptStatus.OK)
+                return null;
             using (Transaction trans = db.TransactionManager.StartTransaction())
             {
                 // 遍历块参照
@@ -319,7 +325,7 @@ namespace DotNetARX
                 {
                     //获取块参照
                     BlockReference block = (BlockReference)trans.GetObject(id, OpenMode.ForRead);
-                    blocks.Add(block); // 将块参照添加到返回列表 
+                    blocks.Add(block); // 将块参照添加到返回列表
                 }
                 trans.Commit();
             }
@@ -415,18 +421,19 @@ namespace DotNetARX
         public static string GetBlockName(this BlockReference bref)
         {
             string blockName;//存储块名
-            if (bref == null) return null;//如果块参照不存在，则返回
+            if (bref == null)
+                return null;         //如果块参照不存在，则返回
             if (bref.IsDynamicBlock) //如果是动态块
             {
                 //获取动态块所属的动态块表记录
-                ObjectId idDyn = bref.DynamicBlockTableRecord;
+                ObjectId idDyn       = bref.DynamicBlockTableRecord;
                 //打开动态块表记录
                 BlockTableRecord btr = (BlockTableRecord)idDyn.GetObject(OpenMode.ForRead);
-                blockName = btr.Name;//获取块名
+                blockName            = btr.Name;//获取块名
             }
-            else //非动态块
+            else                       //非动态块
                 blockName = bref.Name; //获取块名
-            return blockName;//返回块名
+            return blockName;          //返回块名
         }
 
         /// <summary>
@@ -442,7 +449,7 @@ namespace DotNetARX
             //遍历属性定义对象列表
             foreach (AttributeDefinition att in atts)
             {
-                btr.AppendEntity(att);//为块表记录添加属性
+                btr.AppendEntity(att);                                   //为块表记录添加属性
                 db.TransactionManager.AddNewlyCreatedDBObject(att, true);//通知事务处理
             }
             btr.DowngradeOpen();//为了安全，将块表记录的状态改为读
@@ -467,7 +474,7 @@ namespace DotNetARX
         /// <returns>返回指定动态属性的值</returns>
         public static string GetDynBlockValue(this ObjectId blockId, string propName)
         {
-            string propValue = null;//用于返回动态属性值的变量
+            string propValue = null;               //用于返回动态属性值的变量
             var props = blockId.GetDynProperties();//获得动态块的所有动态属性
             //遍历动态属性
             foreach (DynamicBlockReferenceProperty prop in props)
@@ -493,7 +500,8 @@ namespace DotNetARX
             //获取块参照
             BlockReference br = blockId.GetObject(OpenMode.ForRead) as BlockReference;
             //如果不是动态块，则返回
-            if (br == null && !br.IsDynamicBlock) return null;
+            if (br == null && !br.IsDynamicBlock)
+                return null;
             //返回动态块的动态属性
             return br.DynamicBlockReferencePropertyCollection;
         }

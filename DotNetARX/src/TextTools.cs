@@ -30,125 +30,125 @@ namespace DotNetARX
         /// <summary>
         /// 度符号(°)
         /// </summary>
-        public static readonly string Degree=@"\U+00B0";
+        public static readonly string Degree          = @"\U+00B0";
         /// <summary>
         /// 公差符号(±)
         /// </summary>
-        public static readonly string Tolerance=@"\U+00B1";
+        public static readonly string Tolerance       = @"\U+00B1";
         /// <summary>
         /// 直径符号(φ)
         /// </summary>
-        public static readonly string Diameter=@"\U+2205";
+        public static readonly string Diameter        = @"\U+2205";
         /// <summary>
         /// 几乎相等(≈)
         /// </summary>
-        public static readonly string AlmostEqual=@"\U+2248";
+        public static readonly string AlmostEqual     = @"\U+2248";
         /// <summary>
         /// 角度(∠)
         /// </summary>
-        public static readonly string Angle=@"\U+2220";
+        public static readonly string Angle           = @"\U+2220";
         /// <summary>
         /// 边界线
         /// </summary>
-        public static readonly string LineBoundary=@"\U+E100";
+        public static readonly string LineBoundary    = @"\U+E100";
         /// <summary>
         /// 中心线
         /// </summary>
-        public static readonly string LineCenter=@"\U+2104";
+        public static readonly string LineCenter      = @"\U+2104";
         /// <summary>
         /// 增量(Δ)
         /// </summary>
-        public static readonly string Delta=@"\U+0394";
+        public static readonly string Delta           = @"\U+0394";
         /// <summary>
         /// 电相位(φ)
         /// </summary>
-        public static readonly string ElectricalPhase=@"\U+0278";
+        public static readonly string ElectricalPhase = @"\U+0278";
         /// <summary>
         /// 流线
         /// </summary>
-        public static readonly string LineFlow=@"\U+E101";
+        public static readonly string LineFlow        = @"\U+E101";
         /// <summary>
         /// 标识
         /// </summary>
-        public static readonly string Identity=@"\U+2261";
+        public static readonly string Identity        = @"\U+2261";
         /// <summary>
         /// 初始长度
         /// </summary>
-        public static readonly string InitialLength=@"\U+E200";
+        public static readonly string InitialLength   = @"\U+E200";
         /// <summary>
         /// 界碑线
         /// </summary>
-        public static readonly string LineMonument=@"\U+E102";
+        public static readonly string LineMonument    = @"\U+E102";
         /// <summary>
         /// 不相等(≠)
         /// </summary>
-        public static readonly string Notequal=@"\U+2260";
+        public static readonly string Notequal        = @"\U+2260";
         /// <summary>
         /// 欧姆
         /// </summary>
-        public static readonly string Ohm=@"\U+2126";
+        public static readonly string Ohm             = @"\U+2126";
         /// <summary>
         /// 欧米加(Ω)
         /// </summary>
-        public static readonly string Omega=@"\U+03A9";
+        public static readonly string Omega           = @"\U+03A9";
         /// <summary>
         /// 地界线
         /// </summary>
-        public static readonly string LinePlate=@"\U+214A";
+        public static readonly string LinePlate       = @"\U+214A";
         /// <summary>
         /// 下标2
         /// </summary>
-        public static readonly string Subscript2=@"\U+2082";
+        public static readonly string Subscript2      = @"\U+2082";
         /// <summary>
         /// 平方
         /// </summary>
-        public static readonly string Square=@"\U+00B2";
+        public static readonly string Square          = @"\U+00B2";
         /// <summary>
         /// 立方
         /// </summary>
-        public static readonly string Cube=@"\U+00B3";
+        public static readonly string Cube            = @"\U+00B3";
         #endregion
         #region 单行文字上下划线
         /// <summary>
         /// 单行文字上划线
         /// </summary>
-        public static readonly string Overline=@"%%o";
+        public static readonly string Overline        = @"%%o";
         /// <summary>
         /// 单行文字下划线
         /// </summary>
-        public static readonly string Underline=@"%%u";
+        public static readonly string Underline       = @"%%u";
         #endregion
         #region 希腊字母
         /// <summary>
         /// α
         /// </summary>
-        public static readonly string Alpha=@"\U+03B1";
+        public static readonly string Alpha           = @"\U+03B1";
         /// <summary>
         /// β
         /// </summary>
-        public static readonly string Belta=@"\U+03B2";
+        public static readonly string Belta           = @"\U+03B2";
         /// <summary>
-        /// γ 
+        /// γ
         /// </summary>
-        public static readonly string Gamma=@"\U+03B3";
+        public static readonly string Gamma           = @"\U+03B3";
         #endregion
         #region 钢筋符号
         /// <summary>
         /// 一级钢筋符号
         /// </summary>
-        public static readonly string SteelBar1=@"\U+0082";
+        public static readonly string SteelBar1       = @"\U+0082";
         /// <summary>
         /// 二级钢筋符号
         /// </summary>
-        public static readonly string SteelBar2=@"\U+0083";
+        public static readonly string SteelBar2       = @"\U+0083";
         /// <summary>
         /// 三级钢筋符号
         /// </summary>
-        public static readonly string SteelBar3=@"\U+0084";
+        public static readonly string SteelBar3       = @"\U+0084";
         /// <summary>
         /// 四级钢筋符号
         /// </summary>
-        public static readonly string SteelBar4=@"\U+0085";
+        public static readonly string SteelBar4       = @"\U+0085";
         #endregion
     }
     /// <summary>
@@ -163,11 +163,11 @@ namespace DotNetARX
         /// <returns>返回多行文字的真实内容</returns>
         public static string GetText(this MText mtext)
         {
-            string content=mtext.Contents;//多行文本内容
+            string content = mtext.Contents;//多行文本内容
             //将多行文本按“\\”进行分割
-            string[] strs=content.Split(new string[] { @"\\" }, StringSplitOptions.None);
+            string[] strs = content.Split(new string[] { @"\\" }, StringSplitOptions.None);
             //指定不区分大小写
-            RegexOptions ignoreCase=RegexOptions.IgnoreCase;
+            RegexOptions ignoreCase = RegexOptions.IgnoreCase;
             for (int i = 0; i < strs.Length; i++)
             {
                 //删除段落缩进格式
@@ -208,7 +208,7 @@ namespace DotNetARX
         public static string StackText(string text, string supText, string subText, StackType stackType, double scale)
         {
             //设置堆叠方式所代表的字符，用于将StackType枚举转换为对应的字符
-            string[] strs=new string[] { "/", "#", "^" };
+            string[] strs = new string[] { "/", "#", "^" };
             //设置堆叠文字
             return string.Format(
                     "\\A1;{0}{1}\\H{2:0.#}x;\\S{3}{4}{5};{6}",
@@ -223,28 +223,26 @@ namespace DotNetARX
         public static void SetFromTextStyle(this DBText txt)
         {
             //打开文字样式表记录
-            TextStyleTableRecord str=(TextStyleTableRecord)txt.TextStyleId.GetObject(OpenMode.ForRead);
+#if NET35
+            var str = (TextStyleTableRecord)txt.TextStyle.GetObject(OpenMode.ForRead);
+#else
+            var str = (TextStyleTableRecord)txt.TextStyleId.GetObject(OpenMode.ForRead);
+#endif
             //必须保证文字为写的状态
             if (!txt.IsWriteEnabled)
                 txt.UpgradeOpen();
             txt.Oblique = str.ObliquingAngle;//设置倾斜角(弧度)
-            txt.Annotative = str.Annotative;//设置文字的注释性
+            txt.Annotative = str.Annotative; //设置文字的注释性
             //文字方向与布局是否匹配
             txt.SetPaperOrientation(Convert.ToBoolean(str.PaperOrientation));
             txt.WidthFactor = str.XScale;//设置宽度比例
-            txt.Height = str.TextSize;//设置高度
+            txt.Height = str.TextSize;   //设置高度
             if (str.FlagBits == 2)
-            {
                 txt.IsMirroredInX = true;//颠倒
-            }
             else if (str.FlagBits == 4)
-            {
                 txt.IsMirroredInY = true;//反向
-            }
-            else if (str.FlagBits == 6)//颠倒并反向
-            {
+            else if (str.FlagBits == 6)  //颠倒并反向
                 txt.IsMirroredInX = txt.IsMirroredInY = true;
-            }
             txt.DowngradeOpen();//为了安全切换为读的状态
         }
 
@@ -254,9 +252,13 @@ namespace DotNetARX
         /// <param name="mtxt">多行文本对象</param>
         public static void SetFromTextStyle(this MText mtxt)
         {
-            Database db=mtxt.Database;
-            var trans=db.TransactionManager;
-            TextStyleTableRecord str=(TextStyleTableRecord)trans.GetObject(mtxt.TextStyleId, OpenMode.ForRead);
+            Database db = mtxt.Database;
+            var trans = db.TransactionManager;
+#if NET35
+            var str = (TextStyleTableRecord)trans.GetObject(mtxt.TextStyle, OpenMode.ForRead);
+#else
+            var str = (TextStyleTableRecord)trans.GetObject(mtxt.TextStyleId, OpenMode.ForRead);
+#endif
             if (!mtxt.IsWriteEnabled)
                 mtxt.UpgradeOpen();
             mtxt.Rotation = str.ObliquingAngle;

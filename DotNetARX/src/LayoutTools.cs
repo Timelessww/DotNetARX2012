@@ -42,21 +42,24 @@ namespace DotNetARX
             ObjectIdCollection entIds = new ObjectIdCollection();
             ObjectId blkDefId = layout.BlockTableRecordId;
             BlockTableRecord btr = blkDefId.GetObject(OpenMode.ForRead) as BlockTableRecord;
-            if (btr == null) return null;
+            if (btr == null)
+                return null;
             bool bFirstViewport = true;
             foreach (ObjectId entId in btr)
             {
-                Viewport vp = entId.GetObject(OpenMode.ForRead) as Viewport;
+                var vp = entId.GetObject(OpenMode.ForRead) as Viewport;
                 if (vp != null && bFirstViewport)
                 {
-                    if (bIncludeFirstViewport) entIds.Add(entId);
+                    if (bIncludeFirstViewport)
+                        entIds.Add(entId);
                     bFirstViewport = false;
                 }
-                else entIds.Add(entId);
+                else
+                    entIds.Add(entId);
                 ObjectId dictId = vp.ExtensionDictionary;
                 if (dictId.IsValid)
                 {
-                    DBDictionary dict = (DBDictionary)dictId.GetObject(OpenMode.ForWrite);
+                    DBDictionary dict        = (DBDictionary)dictId.GetObject(OpenMode.ForWrite);
                     dict.TreatElementsAsHard = true;
                 }
             }
@@ -84,7 +87,7 @@ namespace DotNetARX
                     {
                         layoutId = btr.LayoutId;
                         // 获取布局中的所有实体
-                        entIds = layout.GetEntsInLayout(true);
+                        entIds   = layout.GetEntsInLayout(true);
                         break;
                     }
                 }
@@ -142,7 +145,7 @@ namespace DotNetARX
                                 firstVP.Width = secondVP.Width;
                                 firstVP.ColorIndex = 5;
                                 Point3d midPt = GeTools.MidPoint(ext.MinPoint, ext.MaxPoint);
-                                firstVP.ViewCenter = new Point2d(midPt.X, midPt.Y); ;
+                                firstVP.ViewCenter = new Point2d(midPt.X, midPt.Y);
                                 double xScale = secondVP.Width / ((ext.MaxPoint.X - ext.MinPoint.X) * 1.1);
                                 double yScale = secondVP.Height / ((ext.MaxPoint.Y - ext.MinPoint.Y) * 1.1);
                                 firstVP.CustomScale = Math.Min(xScale, yScale);
