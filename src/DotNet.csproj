@@ -1,0 +1,218 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+<!--<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">-->
+    <PropertyGroup>
+        <!--永远支持最新语法 preview,默认是latestMajor-->
+        <LangVersion>preview</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <!--公司 版权 作者 描述-->
+        <Company>DotNetARX</Company>
+        <Copyright>DotNetARX</Copyright>
+        <Authors>CaiNiao</Authors>
+        <PackageTags>CAD;AutoCad;C#;NET</PackageTags>
+
+        <!--构建时生成Appx包-->
+        <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+        <!--构建时生成包-->
+        <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+        <Description>基于.NET的Cad二次开发类库</Description>
+        <!--<NuSpecFile>Fody.nuspec</NuSpecFile>-->
+        <!--调试类型-嵌入式-->
+        <DebugType>embedded</DebugType>
+        <!--调试符号-->
+        <DebugSymbols>true</DebugSymbols>
+
+        <!--开源信息-->
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://gitee.com/JJbox/jjbox.git</RepositoryUrl>
+        <PackageProjectUrl>https://gitee.com/JJbox/jjbox</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+        <!--版本号迭代-->
+        <AssemblyVersion>1.0.0.*</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Deterministic>False</Deterministic>
+
+        <!--工程版本-->
+        <TargetFrameworks>NET35;NET40;NET45</TargetFrameworks>
+        <!-- 支持wpf -->
+        <UseWpf>true</UseWpf>
+        <!-- 支持winform -->
+        <UseWindowsForms>true</UseWindowsForms>
+        <!-- 默认引用相关依赖的属性 WPF -->
+        <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
+        <!-- 默认引用相关依赖的属性 WindowsForms -->
+        <ExtrasEnableWinFormsProjectSetup>true</ExtrasEnableWinFormsProjectSetup>
+        <!--输出路径-->
+        <OutputPath></OutputPath>
+
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <!--Debug-->
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net35|AnyCPU'">
+        <DefineConstants>DEBUG;AC2008</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>x86</PlatformTarget>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|AC2010|AnyCPU'">
+        <DefineConstants>DEBUG;AC2010</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net40|AnyCPU'">
+        <DefineConstants>DEBUG;AC2013</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
+        <DefineConstants>DEBUG;AC2015</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|AnyCPU'">
+        <DefineConstants>DEBUG;AC2017</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net47|AnyCPU'">
+        <DefineConstants>DEBUG;AC2019</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+        <DefineConstants>DEBUG;AC2021</DefineConstants>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <!--Release设置-->
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net35|AnyCPU'">
+        <DefineConstants>TRACE;AC2008</DefineConstants>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|AC2010|AnyCPU'">
+        <DefineConstants>TRACE;AC2010</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net40|AnyCPU'">
+        <DefineConstants>TRACE;AC2013</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+        <DefineConstants>TRACE;AC2015</DefineConstants>
+        <NoWarn>1701;1702;1806;1401;2211</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net46|AnyCPU'">
+        <DefineConstants>TRACE;AC2017</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net47|AnyCPU'">
+        <DefineConstants>TRACE;AC2019</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+        <DefineConstants>TRACE;AC2021</DefineConstants>
+    </PropertyGroup>
+
+
+    <!--MSBuild条件 版本号运算 https://docs.microsoft.com/zh-cn/visualstudio/msbuild/msbuild-conditions?view=vs-2019 -->
+    <!--WPF需要的dll,System.Xaml在net35没有-->
+    <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
+        <Reference Include="System.Xaml" />
+        <PackageReference Include="CommonServiceLocator" Version="2.0.5" />
+        <!--嵌入编辑器用的-->
+        <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
+
+        <!--引用mysql的dll,引起net35的WPF错误-->
+        <!--<Reference Include="MySql.Data">
+            <HintPath>C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySql.Data.dll</HintPath>
+        </Reference>-->
+    </ItemGroup>
+
+
+    <!--net35和net40没有 WPF需要的新特性 注意大于号-->
+    <!--<ItemGroup Condition="'$(TargetFramework)' != 'net40' And '$(TargetFramework)' != 'net35'">
+        <PackageReference Include="System.Runtime" Version="4.0.0" />
+        <PackageReference Include="SqlSugar" Version="5.0.3.3" />
+    </ItemGroup>-->
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+        <!--ExcludeAssets 因为Acad2008不可以复制dll到目标,否则会无法使用命令-->
+        <PackageReference Include="JJBox.Acad2008" Version="1.0.0" ExcludeAssets="runtime" />
+        <!--com内容涉及cui不是那么容易反射的-->
+        <!--<PackageReference Include="Autocad.NetApi" Version="17.2.0"  ExcludeAssets="runtime"/>-->
+
+        <PackageReference Include="CommonServiceLocator" Version="1.0.0" />
+        <!--嵌入编辑器用的-->
+        <PackageReference Include="AvalonEdit" Version="5.0.4" />
+    </ItemGroup>
+
+
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+        <PackageReference Include="JJBox.Acad2013" Version="1.0.0" />
+        <!--<PackageReference Include="Autocad.NetApi" Version="19.0.0"  ExcludeAssets="runtime"/>-->
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+        <PackageReference Include="JJBox.Acad2015" Version="1.0.0" />
+        <!--<PackageReference Include="AutoCAD.NET" Version="20.0.1"  ExcludeAssets="runtime"/>-->
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+        <PackageReference Include="JJBox.Acad2017" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+        <PackageReference Include="JJBox.Acad2019" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+        <PackageReference Include="JJBox.Acad2021" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!--单元测试-->
+        <PackageReference Include="Microsoft.QualityTools.Testing.Fakes" Version="16.11.230815" />
+        <PackageReference Include="MathNet.Numerics" Version="3.20.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+
+        <Reference Include="Microsoft.VisualC" />
+        <Reference Include="System.Management" />
+        <Reference Include="System.Runtime.Remoting" />
+        <Reference Include="System.ServiceModel" />
+        <Reference Include="System.ServiceProcess" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!--WPF的包 WPF的程序集引用 这个弃用了-->
+        <!--<PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />-->
+
+        <!--这个包是core的-->
+        <!--<Reference Include="PresentationCore" />-->
+        <Reference Include="PresentationFramework" />
+        <Reference Include="WindowsBase" />
+        <Reference Include="WindowsFormsIntegration" />
+    </ItemGroup>
+
+</Project>

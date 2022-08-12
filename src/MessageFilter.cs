@@ -20,7 +20,7 @@ namespace DotNetARX
         /// 在调度消息之前将其筛选出来
         /// </summary>
         /// <param name="m">消息名</param>
-        /// <returns>如果调试的是按键消息，则返回true,否则返回false</returns>
+        /// <returns>如果调试的是按键消息,则返回true,否则返回false</returns>
         public bool PreFilterMessage(ref Message m)
         {
             if (m.Msg == WM_KEYDOWN)//如果调度的消息是按键
@@ -30,7 +30,7 @@ namespace DotNetARX
                 //返回true表示调度的是按键消息
                 return true;
             }
-            return false;//返回false，表示非按键消息
+            return false;//返回false,表示非按键消息
         }
     }
 }
