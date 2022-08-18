@@ -13,7 +13,9 @@ global using System.Diagnostics;
 global using System.Xml;
 global using System.Threading;
 global using Exception = System.Exception;
-global using System.Data.OleDb;//数据库
+#if !NET35
+global using System.Data.OleDb;//数据库  
+#endif
 global using Newtonsoft.Json;
 global using Formatting = Newtonsoft.Json.Formatting;
 global using Microsoft.Win32;

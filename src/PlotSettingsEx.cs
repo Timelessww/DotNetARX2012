@@ -596,7 +596,7 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
             {
 
 
-                /* 项目“DotNet (net40)”的未合并的更改
+                /* 项目“DotNet (NET40)”的未合并的更改
                 在此之前:
                                     StdScaleType newScaleType=StdScaleTypeList.FirstOrDefault(s => s.Value == value).Key;
                 在此之后:
