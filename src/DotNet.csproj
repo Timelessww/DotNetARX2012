@@ -28,9 +28,9 @@
         <PackageTags>CAD;AutoCad;C#;NET</PackageTags>
 
         <!--构建时生成Appx包-->
-        <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+        <!--<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>-->
         <!--构建时生成包-->
-        <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+        <!--<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>-->
         <Description>基于.NET的Cad二次开发类库</Description>
         <!--<NuSpecFile>Fody.nuspec</NuSpecFile>-->
         <!--调试类型-嵌入式-->
@@ -42,10 +42,10 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://gitee.com/JJbox/jjbox.git</RepositoryUrl>
         <PackageProjectUrl>https://gitee.com/JJbox/jjbox</PackageProjectUrl>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <!--<PackageLicenseFile>LICENSE</PackageLicenseFile>-->
+        <!--<EnableNETAnalyzers>true</EnableNETAnalyzers>-->
+        <!--<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>-->
+        <!--<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>-->
 
         <!--版本号迭代-->
         <AssemblyVersion>1.0.0.*</AssemblyVersion>
