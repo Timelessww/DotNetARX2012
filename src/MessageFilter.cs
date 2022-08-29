@@ -23,14 +23,14 @@ namespace DotNetARX
         /// <returns>如果调试的是按键消息,则返回true,否则返回false</returns>
         public bool PreFilterMessage(ref Message m)
         {
-            if (m.Msg == WM_KEYDOWN)//如果调度的消息是按键
+            if (m.Msg == WM_KEYDOWN)// 如果调度的消息是按键
             {
-                //设置键名
+                // 设置键名
                 KeyName = (Keys)(int)m.WParam & Keys.KeyCode;
-                //返回true表示调度的是按键消息
+                // 返回true表示调度的是按键消息
                 return true;
             }
-            return false;//返回false,表示非按键消息
+            return false;// 返回false,表示非按键消息
         }
     }
 }

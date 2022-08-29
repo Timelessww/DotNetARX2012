@@ -74,19 +74,19 @@ public static partial class Tools
     /// <returns>返回添加到模型空间中的实体ObjectId</returns>
     public static ObjectId AddToModelSpace(this Database db, Entity ent)
     {
-        ObjectId entId;//用于返回添加到模型空间中的实体ObjectId
-        //定义一个指向当前数据库的事务处理,以添加直线
+        ObjectId entId;// 用于返回添加到模型空间中的实体ObjectId
+        // 定义一个指向当前数据库的事务处理,以添加直线
         using (Transaction trans = db.TransactionManager.StartTransaction())
         {
-            //以读方式打开块表
+            // 以读方式打开块表
             BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-            //以写方式打开模型空间块表记录.
+            // 以写方式打开模型空间块表记录.
             BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-            entId = btr.AppendEntity(ent);//将图形对象的信息添加到块表记录中
-            trans.AddNewlyCreatedDBObject(ent, true);//把对象添加到事务处理中
-            trans.Commit();//提交事务处理
+            entId = btr.AppendEntity(ent);// 将图形对象的信息添加到块表记录中
+            trans.AddNewlyCreatedDBObject(ent, true);// 把对象添加到事务处理中
+            trans.Commit();// 提交事务处理
         }
-        return entId; //返回实体的ObjectId
+        return entId; // 返回实体的ObjectId
     }
 
     /// <summary>

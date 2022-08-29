@@ -12,15 +12,15 @@ public static class SummaryInfoTools
     /// <returns>返回自定义属性个数</returns>
     public static int NumCustomProperties(this Database db)
     {
-        DatabaseSummaryInfo info = db.SummaryInfo; //获取数据库摘要信息
-        //获取摘要信息中的自定义属性集合
+        DatabaseSummaryInfo info = db.SummaryInfo; // 获取数据库摘要信息
+        // 获取摘要信息中的自定义属性集合
         System.Collections.IDictionaryEnumerator props = info.CustomProperties;
-        int count = 0;//计数器,用于统计自定义属性个数
-        while (props.MoveNext())//遍历自定义属性
+        int count = 0;// 计数器,用于统计自定义属性个数
+        while (props.MoveNext())// 遍历自定义属性
         {
-            count++;//计数器累加
+            count++;// 计数器累加
         }
-        return count;//返回自定义属性个数
+        return count;// 返回自定义属性个数
     }
 
     /// <summary>
@@ -31,15 +31,15 @@ public static class SummaryInfoTools
     /// <returns>如果存在指定的自定义属性,返回true,否则返回false</returns>
     public static bool HasCustomProperty(this Database db, string key)
     {
-        DatabaseSummaryInfo info = db.SummaryInfo; //获取数据库摘要信息
-        //获取摘要信息中的自定义属性集合
+        DatabaseSummaryInfo info = db.SummaryInfo; // 获取数据库摘要信息
+        // 获取摘要信息中的自定义属性集合
         System.Collections.IDictionaryEnumerator props = info.CustomProperties;
-        while (props.MoveNext())//遍历自定义属性
+        while (props.MoveNext())// 遍历自定义属性
         {
-            //如果存在指定的自定义属性,返回true
+            // 如果存在指定的自定义属性,返回true
             if (props.Key.ToString().ToUpper() == key.ToUpper()) return true;
         }
-        return false;//不存在指定的自定义属性,返回false
+        return false;// 不存在指定的自定义属性,返回false
     }
 
     /// <summary>
@@ -49,16 +49,16 @@ public static class SummaryInfoTools
     /// <returns>如果存在摘要信息,返回true,否则返回false</returns>
     public static bool HasSummaryInfo(this Database db)
     {
-        //如果存在自定义属性,则说明肯定有摘要信息
+        // 如果存在自定义属性,则说明肯定有摘要信息
         if (db.NumCustomProperties() > 0) return true;
-        DatabaseSummaryInfo info = db.SummaryInfo;//数据库的摘要信息
-        //如果存在摘要信息,则返回true
+        DatabaseSummaryInfo info = db.SummaryInfo;// 数据库的摘要信息
+        // 如果存在摘要信息,则返回true
         if (!info.Author.IsNullOrWhiteSpace() && !info.Comments.IsNullOrWhiteSpace()
             && !info.HyperlinkBase.IsNullOrWhiteSpace() && !info.Keywords.IsNullOrWhiteSpace()
             && !info.RevisionNumber.IsNullOrWhiteSpace()
             && !info.Subject.IsNullOrWhiteSpace() && !info.Title.IsNullOrWhiteSpace())
             return true;
-        return false;//不存在摘要信息,返回false
+        return false;// 不存在摘要信息,返回false
     }
 
     /// <summary>
@@ -68,9 +68,9 @@ public static class SummaryInfoTools
     /// <returns>返回图形创建的时间</returns>
     public static DateTime CreationTime(this Database db)
     {
-        //获取TDCREATE系统变量,该变量存储图形的创建时间（儒略日格式）
+        // 获取TDCREATE系统变量,该变量存储图形的创建时间（儒略日格式）
         double creationTime = (double)Application.GetSystemVariable("TDCREATE");
-        //将儒略日时间格式转换为DateTime格式,并返回
+        // 将儒略日时间格式转换为DateTime格式,并返回
         return ConvertAcadJulianToDateTime(creationTime);
     }
 
@@ -81,9 +81,9 @@ public static class SummaryInfoTools
     /// <returns>返回图形的上次修改时间</returns>
     public static DateTime ModifyTime(this Database db)
     {
-        //获取TDUPDATE系统变量,该变量存储图形上次修改的时间（儒略日格式）
+        // 获取TDUPDATE系统变量,该变量存储图形上次修改的时间（儒略日格式）
         double creationTime = (double)Application.GetSystemVariable("TDUPDATE");
-        //将儒略日时间格式转换为DateTime格式,并返回
+        // 将儒略日时间格式转换为DateTime格式,并返回
         return ConvertAcadJulianToDateTime(creationTime);
     }
 
@@ -94,9 +94,9 @@ public static class SummaryInfoTools
     /// <returns>返回编辑图形的总时间</returns>
     public static TimeSpan TotalEditTime(this Database db)
     {
-        //获取TDINDWG系统变量,该变量存储编辑图形的总时间,该时间格式为<天数>.<天的小数部分> 
+        // 获取TDINDWG系统变量,该变量存储编辑图形的总时间,该时间格式为<天数>.<天的小数部分> 
         double day = (double)Application.GetSystemVariable("TDINDWG");
-        return TimeSpan.FromDays(day);//返回一个时间间隔对象
+        return TimeSpan.FromDays(day);// 返回一个时间间隔对象
     }
 
     /// <summary>

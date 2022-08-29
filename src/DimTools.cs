@@ -238,11 +238,11 @@ public static class DimTools
     /// </summary>
     public static string ArrowBlock
     {
-        //获取DIMBLK系统变量值,它表示尺寸线末端显示的箭头块
+        // 获取DIMBLK系统变量值,它表示尺寸线末端显示的箭头块
         get { return Application.GetSystemVariable("DIMBLK").ToString(); }
         set
         {
-            //设置DIMBLK系统变量值
+            // 设置DIMBLK系统变量值
             Application.SetSystemVariable("DIMBLK", value);
         }
     }
@@ -256,15 +256,15 @@ public static class DimTools
     /// <returns>返回指定箭头块的ObjectId</returns>
     public static ObjectId GetArrowObjectId(this Database db, string arrowName)
     {
-        ObjectId arrId=ObjectId.Null;//存储箭头符号的ObjectId
+        ObjectId arrId=ObjectId.Null;// 存储箭头符号的ObjectId
         using (Transaction trans=db.TransactionManager.StartTransaction())
         {
             BlockTable bt=(BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-            //如果图形中存在指定名称的箭头块,则获取其ObjectId
+            // 如果图形中存在指定名称的箭头块,则获取其ObjectId
             if (bt.Has(arrowName)) arrId = bt[arrowName];
             trans.Commit();
         }
-        return arrId;//返回箭头块的ObjectId
+        return arrId;// 返回箭头块的ObjectId
     }
     /// <summary>
     /// 设置形位公差值
@@ -277,8 +277,8 @@ public static class DimTools
     /// <param name="thirdDatum">第三级基准要素</param>
     public static void CreateTolerance(this FeatureControlFrame frame, string geometricSym, string torlerance, string firstDatum, string secondDatum, string thirdDatum)
     {
-        if (frame == null) return;//特征控制框对象必须已定义,否则返回
-        //设置形位公差值,各组成部分用竖线（%%v）分隔
+        if (frame == null) return;// 特征控制框对象必须已定义,否则返回
+        // 设置形位公差值,各组成部分用竖线（%%v）分隔
         frame.Text = geometricSym + "%%v" + torlerance + "%%v" + firstDatum + "%%v" + secondDatum + "%%v" + thirdDatum;
     }
 }

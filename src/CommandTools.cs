@@ -146,7 +146,7 @@ public static class CommandTools
         _ = ads_queueexpr(expression);
     }
 
-    //调用AutoCAD命令,ARX原型：int acedCmd(const struct resbuf * rbp);
+    // 调用AutoCAD命令,ARX原型：int acedCmd(const struct resbuf * rbp);
     [DllImport("acad.exe", EntryPoint = "acedCmd", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
     private extern static int acedCmd(IntPtr rbp);
     /// <summary>
@@ -157,7 +157,7 @@ public static class CommandTools
     /// <returns>返回命令执行的状态</returns>
     public static int AcedCmd(this Editor ed, ResultBuffer args)
     {
-        //由于acedCmd只能在程序环境下运行,因此需调用此语句
+        // 由于acedCmd只能在程序环境下运行,因此需调用此语句
         if (!Acap.DocumentManager.IsApplicationContext)
             return acedCmd(args.UnmanagedObject);
         else

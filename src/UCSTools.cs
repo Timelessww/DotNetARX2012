@@ -69,21 +69,21 @@ public static class UCSTools
     public static ObjectId AddUCS(this Database db, string UCSName)
     {
         var trans = db.TransactionManager;
-        //打开UCS表
+        // 打开UCS表
         UcsTable ut = (UcsTable)trans.GetObject(db.UcsTableId, OpenMode.ForRead);
-        if (!ut.Has(UCSName))//如果不存在名为UCSName的UCS,则新建一个UCS
+        if (!ut.Has(UCSName))// 如果不存在名为UCSName的UCS,则新建一个UCS
         {
-            //定义一个新的UCS
+            // 定义一个新的UCS
             UcsTableRecord utr = new UcsTableRecord();
-            utr.Name = UCSName;//设置UCS名
-            ut.UpgradeOpen();//切换UCS表的状态为写以添加新的UCS
-            //将UCS的信息添加到UCS表中
+            utr.Name = UCSName;// 设置UCS名
+            ut.UpgradeOpen();// 切换UCS表的状态为写以添加新的UCS
+            // 将UCS的信息添加到UCS表中
             ut.Add(utr);
-            //把UCS添加到事务处理中
+            // 把UCS添加到事务处理中
             trans.AddNewlyCreatedDBObject(utr, true);
-            ut.DowngradeOpen();//为了安全,将UCS表的状态切换为读
+            ut.DowngradeOpen();// 为了安全,将UCS表的状态切换为读
         }
-        return ut[UCSName];//返回新添加的UCS的ObjectId
+        return ut[UCSName];// 返回新添加的UCS的ObjectId
     }
 
     /// <summary>
@@ -96,16 +96,16 @@ public static class UCSTools
     {
         var trans = db.TransactionManager;
         Editor ed = db.GetEditor();
-        //打开UCS表
+        // 打开UCS表
         UcsTable ut = (UcsTable)trans.GetObject(db.UcsTableId, OpenMode.ForRead);
-        //如果不存在名为UCSName的UCS,则返回
+        // 如果不存在名为UCSName的UCS,则返回
         if (!ut.Has(UCSName)) return false;
-        //打开当前活动的视口为写的状态
+        // 打开当前活动的视口为写的状态
         ViewportTableRecord vtr = (ViewportTableRecord)trans.GetObject(db.CurrentViewportTableRecordId(), OpenMode.ForWrite);
-        //设置当前UCS
+        // 设置当前UCS
         vtr.SetUcs(ut[UCSName]);
         vtr.DowngradeOpen();
-        //更新视口
+        // 更新视口
         ed.UpdateTiledViewportsFromDatabase();
         return true;
     }
@@ -119,11 +119,11 @@ public static class UCSTools
     {
         var trans = db.TransactionManager;
         Editor ed = db.GetEditor();
-        //打开UCS表
+        // 打开UCS表
         UcsTable ut = (UcsTable)trans.GetObject(db.UcsTableId, OpenMode.ForRead);
-        //打开当前活动的视口
+        // 打开当前活动的视口
         ViewportTableRecord vtr = (ViewportTableRecord)trans.GetObject(db.CurrentViewportTableRecordId(), OpenMode.ForRead);
-        //返回当前UCS的ObjectId
+        // 返回当前UCS的ObjectId
         return vtr.UcsName;
     }
 
@@ -136,12 +136,12 @@ public static class UCSTools
     {
         var db = ucsId.Database;
         var trans = db.TransactionManager;
-        //打开UCS
+        // 打开UCS
         var utr = trans.GetObject(ucsId, OpenMode.ForRead) as UcsTableRecord;
-        if (utr == null) return;//若UCS不存在,则返回
-        utr.UpgradeOpen();//切换UCS为写的状态
-        utr.Origin = pt;//设置UCS的原点
-        utr.DowngradeOpen();//为了安全,切换UCS为读的状态
+        if (utr == null) return;// 若UCS不存在,则返回
+        utr.UpgradeOpen();// 切换UCS为写的状态
+        utr.Origin = pt;// 设置UCS的原点
+        utr.DowngradeOpen();// 为了安全,切换UCS为读的状态
     }
 
     /// <summary>
@@ -154,15 +154,15 @@ public static class UCSTools
     {
         var db = ucsId.Database;
         var trans = db.TransactionManager;
-        //打开UCS
+        // 打开UCS
         var utr = trans.GetObject(ucsId, OpenMode.ForRead) as UcsTableRecord;
-        if (utr == null) return;//若UCS不存在,则返回
-        utr.UpgradeOpen();//切换UCS为写的状态
-        var xAxis = utr.XAxis;//UCS的X轴方向
-        var yAxis = utr.YAxis;//UCS的Y轴方向
-        //旋转UCS
+        if (utr == null) return;// 若UCS不存在,则返回
+        utr.UpgradeOpen();// 切换UCS为写的状态
+        var xAxis = utr.XAxis;// UCS的X轴方向
+        var yAxis = utr.YAxis;// UCS的Y轴方向
+        // 旋转UCS
         utr.XAxis = xAxis.RotateBy(rotateAngle * Math.PI / 180, rotateAxis);
         utr.YAxis = yAxis.RotateBy(rotateAngle * Math.PI / 180, rotateAxis);
-        utr.DowngradeOpen();//为了安全,切换UCS为读的状态
+        utr.DowngradeOpen();// 为了安全,切换UCS为读的状态
     }
 }

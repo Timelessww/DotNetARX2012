@@ -27,27 +27,27 @@ public static partial class LinqToCAD
     public static List<T> GetEntsInDatabase<T>(this Database db, OpenMode mode, bool openErased) where T : Entity
     {
         Editor ed = Acap.DocumentManager.MdiActiveDocument.Editor;
-        //声明一个List类的变量,用于返回类型为T为的实体列表
+        // 声明一个List类的变量,用于返回类型为T为的实体列表
         List<T> ents = new List<T>();
-        //获取类型T代表的DXF代码名用于构建选择集过滤器
+        // 获取类型T代表的DXF代码名用于构建选择集过滤器
         string dxfname = RXClass.GetClass(typeof(T)).DxfName;
-        //构建选择集过滤器        
+        // 构建选择集过滤器        
         TypedValue[] values = { new TypedValue((int)DxfCode.Start, dxfname) };
         SelectionFilter filter = new SelectionFilter(values);
-        //选择符合条件的所有实体
+        // 选择符合条件的所有实体
         PromptSelectionResult entSelected = ed.SelectAll(filter);
         if (entSelected.Status == PromptStatus.OK)
         {
-            //循环遍历符合条件的实体
+            // 循环遍历符合条件的实体
             foreach (var id in entSelected.Value.GetObjectIds())
             {
-                //将实体强制转化为T类型的对象
-                //不能将实体直接转化成泛型T,必须首先转换成object类
+                // 将实体强制转化为T类型的对象
+                // 不能将实体直接转化成泛型T,必须首先转换成object类
                 T t = (T)(object)id.GetObject(mode, openErased);
-                ents.Add(t);//将实体添加到返回列表中
+                ents.Add(t);// 将实体添加到返回列表中
             }
         }
-        return ents;//返回类型为T为的实体列表
+        return ents;// 返回类型为T为的实体列表
     }
 
     /// <summary>
@@ -154,28 +154,28 @@ public static partial class LinqToCAD
     public static List<T> GetEntsInModelSpace<T>(this Database db, OpenMode mode, bool openErased) where T : Entity
     {
         Editor ed = Acap.DocumentManager.MdiActiveDocument.Editor;
-        //声明一个List类的变量,用于返回类型为T为的实体列表
+        // 声明一个List类的变量,用于返回类型为T为的实体列表
         List<T> ents = new List<T>();
-        //获取类型T代表的DXF代码名用于构建选择集过滤器
+        // 获取类型T代表的DXF代码名用于构建选择集过滤器
         string dxfname = RXClass.GetClass(typeof(T)).DxfName;
-        //构建选择集过滤器        
+        // 构建选择集过滤器        
         TypedValue[] values = { new TypedValue((int)DxfCode.Start, dxfname),
                                 new TypedValue((int)DxfCode.LayoutName,"Model")};
         SelectionFilter filter = new SelectionFilter(values);
-        //选择符合条件的所有实体
+        // 选择符合条件的所有实体
         PromptSelectionResult entSelected = ed.SelectAll(filter);
         if (entSelected.Status == PromptStatus.OK)
         {
-            //循环遍历符合条件的实体
+            // 循环遍历符合条件的实体
             foreach (var id in entSelected.Value.GetObjectIds())
             {
-                //将实体强制转化为T类型的对象
-                //不能将实体直接转化成泛型T,必须首先转换成object类
+                // 将实体强制转化为T类型的对象
+                // 不能将实体直接转化成泛型T,必须首先转换成object类
                 T t = (T)(object)id.GetObject(mode, openErased);
-                ents.Add(t);//将实体添加到返回列表中
+                ents.Add(t);// 将实体添加到返回列表中
             }
         }
-        return ents;//返回类型为T为的实体列表
+        return ents;// 返回类型为T为的实体列表
     }
 
     /// <summary>
@@ -238,13 +238,13 @@ public static partial class LinqToCAD
     public static List<Entity> GetEntsInDatabase(this Database db, OpenMode mode, bool openErased)
     {
         var trans = db.TransactionManager;
-        //声明一个List类的变量,用于返回所有实体
+        // 声明一个List类的变量,用于返回所有实体
         List<Entity> ents = new List<Entity>();
         Editor ed = Acap.DocumentManager.MdiActiveDocument.Editor;
         var entSelected = ed.SelectAll();
         if (entSelected.Status == PromptStatus.OK)
         {
-            //循环遍历符合条件的实体
+            // 循环遍历符合条件的实体
             foreach (var id in entSelected.Value.GetObjectIds())
             {
                 Entity ent = (Entity)(object)trans.GetObject(id, mode, openErased);

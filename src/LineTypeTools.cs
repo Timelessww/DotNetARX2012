@@ -40,19 +40,19 @@ public static class LineTypeTools
     /// <returns>返回新建线型的Id</returns>
     public static ObjectId AddLineType(this Database db, string typeName)
     {
-        //打开线型表
+        // 打开线型表
         LinetypeTable lt=(LinetypeTable)db.LinetypeTableId.GetObject(OpenMode.ForRead);
-        if (!lt.Has(typeName))//如果存在名为typeName的线型表记录
+        if (!lt.Has(typeName))// 如果存在名为typeName的线型表记录
         {
-            lt.UpgradeOpen();//切换线型表为写
-            //新建一个线型表记录
+            lt.UpgradeOpen();// 切换线型表为写
+            // 新建一个线型表记录
             LinetypeTableRecord ltr=new LinetypeTableRecord();
-            ltr.Name = typeName;//设置线型表记录的名称
-            lt.Add(ltr);//将新的线型表记录的信息添加到的线型表中
+            ltr.Name = typeName;// 设置线型表记录的名称
+            lt.Add(ltr);// 将新的线型表记录的信息添加到的线型表中
             db.TransactionManager.AddNewlyCreatedDBObject(ltr, true);
-            lt.DowngradeOpen();//为了安全,将线型表的状态切换为读
+            lt.DowngradeOpen();// 为了安全,将线型表的状态切换为读
         }
-        return lt[typeName];//返回新添加的线型表记录的ObjectId
+        return lt[typeName];// 返回新添加的线型表记录的ObjectId
     }
 
     /// <summary>
@@ -63,14 +63,14 @@ public static class LineTypeTools
     /// <returns>返回装载的线型的Id</returns>
     public static ObjectId LoadLineType(this Database db, string typeName)
     {
-        //打开线型表
+        // 打开线型表
         LinetypeTable lt=(LinetypeTable)db.LinetypeTableId.GetObject(OpenMode.ForRead);
-        if (!lt.Has(typeName))//如果不存在名为typeName的线型
+        if (!lt.Has(typeName))// 如果不存在名为typeName的线型
         {
-            //加载typeName线型
+            // 加载typeName线型
             db.LoadLineTypeFile(typeName, "acad.lin");
         }
-        return lt[typeName];//返回加载的线型的ObjectId
+        return lt[typeName];// 返回加载的线型的ObjectId
     }
 
     /// <summary>
@@ -81,11 +81,11 @@ public static class LineTypeTools
     public static void SetCurrentLineType(this Database db, string typeName)
     {
         var trans=db.TransactionManager;
-        //打开线型表
+        // 打开线型表
         LinetypeTable lt=(LinetypeTable)trans.GetObject(db.LinetypeTableId, OpenMode.ForRead);
-        if (lt.Has(typeName))//如果存在名为typeName的线型
+        if (lt.Has(typeName))// 如果存在名为typeName的线型
         {
-            db.Celtype = lt[typeName];//设置当前线型
+            db.Celtype = lt[typeName];// 设置当前线型
         }
     }
 }

@@ -19,24 +19,24 @@ public static class PlotTools
     /// <returns>返回打印状态</returns>
     public static PreviewEndPlotStatus Plot(this PlotEngine engine, Layout layout, PlotSettings ps, string fileName, int copies, bool isPreview, bool showProgressDialog, bool plotToFile)
     {
-        PlotProgressDialog? plotDlg = null;//声明一个打印进度框对象
-        if (showProgressDialog)//如果需要显示打印进度框,则创建
+        PlotProgressDialog? plotDlg = null;// 声明一个打印进度框对象
+        if (showProgressDialog)// 如果需要显示打印进度框,则创建
         {
             plotDlg = new PlotProgressDialog(isPreview, 1, true);
-            //获取去除扩展名后的文件名（不含路径）
+            // 获取去除扩展名后的文件名（不含路径）
             string plotFileName = SymbolUtilityServices.GetSymbolNameFromPathName(fileName, "dwg");
-            //在打印进度框中显示的图纸名称：当前打印布局的名称（含文档名）
+            // 在打印进度框中显示的图纸名称：当前打印布局的名称（含文档名）
             plotDlg.set_PlotMsgString(PlotMessageIndex.SheetName, "正在处理图纸：" + layout.LayoutName + "(" + plotFileName + ".dwg)");
         }
-        //设置打印的状态为停止
+        // 设置打印的状态为停止
         var status = PreviewEndPlotStatus.Cancel;
-        PlotInfo pi = new()//创建打印信息
+        PlotInfo pi = new()// 创建打印信息
         {
-            Layout = layout.ObjectId,//要打印的布局
-            OverrideSettings = ps//使用ps中的打印设置
+            Layout = layout.ObjectId,// 要打印的布局
+            OverrideSettings = ps// 使用ps中的打印设置
         };
 
-        //验证打印信息是否有效
+        // 验证打印信息是否有效
         PlotInfoValidator piv = new PlotInfoValidator
         {
             MediaMatchingPolicy = MatchingPolicy.MatchEnabled
@@ -46,32 +46,32 @@ public static class PlotTools
         if (plotDlg == null)
             throw new ArgumentException(nameof(plotDlg));
 
-        //启动打印进度框
+        // 启动打印进度框
         if (showProgressDialog)
             plotDlg.StartPlotProgress(isPreview);
-        engine.BeginPlot(plotDlg, null);//开启打印引擎进行打印任务
-        //开始打印文档
+        engine.BeginPlot(plotDlg, null);// 开启打印引擎进行打印任务
+        // 开始打印文档
         engine.BeginDocument(pi, layout.Database.GetDocument().Name, null, copies, plotToFile, fileName);
-        //启动打印图纸进程
+        // 启动打印图纸进程
         if (plotDlg != null) plotDlg.StartSheetProgress();
-        //开始打印页面
+        // 开始打印页面
         PlotPageInfo ppi = new();
         engine.BeginPage(ppi, pi, true, null);
-        engine.BeginGenerateGraphics(null);//开始打印内容
-        //设置打印进度
+        engine.BeginGenerateGraphics(null);// 开始打印内容
+        // 设置打印进度
         if (plotDlg != null) plotDlg.SheetProgressPos = 50;
-        engine.EndGenerateGraphics(null);//内容打印结束
-        //结束页面打印
+        engine.EndGenerateGraphics(null);// 内容打印结束
+        // 结束页面打印
         PreviewEndPlotInfo pepi = new();
         engine.EndPage(pepi);
-        status = pepi.Status;//打印预览结束时的状态
-        //终止显示打印图纸进程
+        status = pepi.Status;// 打印预览结束时的状态
+        // 终止显示打印图纸进程
         if (plotDlg != null) plotDlg.EndSheetProgress();
-        engine.EndDocument(null);//文档打印结束
-        //终止显示打印进度框
+        engine.EndDocument(null);// 文档打印结束
+        // 终止显示打印进度框
         if (plotDlg != null) plotDlg.EndPlotProgress();
-        engine.EndPlot(null);//结束打印任务
-        return status;//打印预览结束时的状态
+        engine.EndPlot(null);// 结束打印任务
+        return status;// 打印预览结束时的状态
     }
     /// <summary>
     /// 执行多布局打印
@@ -87,80 +87,80 @@ public static class PlotTools
     /// <returns>返回打印状态</returns>
     public static PreviewEndPlotStatus MPlot(this PlotEngine engine, List<Layout> layouts, PlotSettings ps, string fileName, int previewNum, int copies, bool showProgressDialog, bool plotToFile)
     {
-        int numSheet = 1;//表示当前打印的图纸序号
-        //设置是否为预览
+        int numSheet = 1;// 表示当前打印的图纸序号
+        // 设置是否为预览
         bool isPreview = previewNum >= 1;
         Document doc = Acap.DocumentManager.MdiActiveDocument;
-        PlotProgressDialog? plotDlg = null;//声明一个打印进度框对象
-        if (showProgressDialog)//如果需要显示打印进度框,则创建
+        PlotProgressDialog? plotDlg = null;// 声明一个打印进度框对象
+        if (showProgressDialog)// 如果需要显示打印进度框,则创建
             plotDlg = new PlotProgressDialog(isPreview, layouts.Count, true);
-        //设置打印的状态为停止
+        // 设置打印的状态为停止
         var status = PreviewEndPlotStatus.Cancel;
-        //重建一个布局列表,因为打印预览只能是单页的
+        // 重建一个布局列表,因为打印预览只能是单页的
         List<Layout> layoutList = new List<Layout>();
-        if (isPreview && previewNum >= 1)//如果为打印预览
-            layoutList.Add(layouts[previewNum - 1]);//只对预览的布局进行操作
-        else layoutList.AddRange(layouts);//如果为打印,则需对所有的布局进行操作
-        foreach (Layout layout in layoutList)//遍历布局
+        if (isPreview && previewNum >= 1)// 如果为打印预览
+            layoutList.Add(layouts[previewNum - 1]);// 只对预览的布局进行操作
+        else layoutList.AddRange(layouts);// 如果为打印,则需对所有的布局进行操作
+        foreach (Layout layout in layoutList)// 遍历布局
         {
             PlotInfo pi = new()
             {
-                Layout = layout.ObjectId//要打印的布局
-            };//创建打印信息
-            //要多文档打印,必须将要打印的布局设置为当前布局
+                Layout = layout.ObjectId// 要打印的布局
+            };// 创建打印信息
+            // 要多文档打印,必须将要打印的布局设置为当前布局
             LayoutManager.Current.CurrentLayout = layout.LayoutName;
-            pi.OverrideSettings = ps;//使用ps中的打印设置
-            //验证打印信息是否有效
+            pi.OverrideSettings = ps;// 使用ps中的打印设置
+            // 验证打印信息是否有效
             PlotInfoValidator piv = new()
             {
                 MediaMatchingPolicy = MatchingPolicy.MatchEnabled
             };
             piv.Validate(pi);
-            if (plotDlg != null)//如果显示打印进度框
+            if (plotDlg != null)// 如果显示打印进度框
             {
-                //获取去除扩展名后的文件名（不含路径）
+                // 获取去除扩展名后的文件名（不含路径）
                 string plotFileName = SymbolUtilityServices.GetSymbolNameFromPathName(doc.Name, "dwg");
-                //在打印进度框中显示的图纸名称：当前打印布局的名称（含文档名）
+                // 在打印进度框中显示的图纸名称：当前打印布局的名称（含文档名）
                 plotDlg.set_PlotMsgString(PlotMessageIndex.SheetName, plotFileName + "-" + layout.LayoutName);
             }
 
             if (plotDlg == null)
                 throw new ArgumentException(nameof(plotDlg));
 
-            //如果打印的是第一张图纸则启动下面的操作,以后就不再需要再次进行
+            // 如果打印的是第一张图纸则启动下面的操作,以后就不再需要再次进行
             if (numSheet == 1)
             {
-                //启动打印进度框
+                // 启动打印进度框
                 if (showProgressDialog)
                     plotDlg.StartPlotProgress(isPreview);
-                engine.BeginPlot(plotDlg, null);//开启打印引擎进行打印任务
-                //开始打印文档
+                engine.BeginPlot(plotDlg, null);// 开启打印引擎进行打印任务
+                // 开始打印文档
                 engine.BeginDocument(pi, doc.Name, null, copies, plotToFile, fileName);
             }
-            //启动打印图纸进程
+            // 启动打印图纸进程
             if (plotDlg != null) plotDlg.StartSheetProgress();
-            //开始打印页面
+            // 开始打印页面
             PlotPageInfo ppi = new();
             engine.BeginPage(ppi, pi, (numSheet == layoutList.Count), null);
-            engine.BeginGenerateGraphics(null);//开始打印内容
-            //设置打印进度
+            engine.BeginGenerateGraphics(null);// 开始打印内容
+            // 设置打印进度
             if (plotDlg != null) plotDlg.SheetProgressPos = 50;
-            engine.EndGenerateGraphics(null);//内容打印结束
-            //结束页面打印
+            engine.EndGenerateGraphics(null);// 内容打印结束
+            // 结束页面打印
             PreviewEndPlotInfo pepi = new PreviewEndPlotInfo();
             engine.EndPage(pepi);
-            status = pepi.Status;//打印预览结束时的状态
-            //终止显示打印图纸进程
+            status = pepi.Status;// 打印预览结束时的状态
+            // 终止显示打印图纸进程
             if (plotDlg != null) plotDlg.EndSheetProgress();
-            numSheet++;//将要打印的图纸序号设置为下一个
-            //更新打印进程
+            numSheet++;// 将要打印的图纸序号设置为下一个
+            // 更新打印进程
             if (plotDlg != null)
                 plotDlg.PlotProgressPos += (100 / layouts.Count);
         }
-        engine.EndDocument(null);//文档打印结束
-        if (plotDlg != null) plotDlg.EndPlotProgress();//终止显示打印进度框
-        engine.EndPlot(null);//结束打印任务
-        return status;//返回打印预览结束时的状态
+        engine.EndDocument(null);// 文档打印结束
+        if (plotDlg != null) plotDlg.EndPlotProgress();// 终止显示打印进度框
+        engine.EndPlot(null);// 结束打印任务
+        return status;// 返回打印预览结束时的状态
     }
     /// <summary>
     /// 启动打印图纸进程
@@ -168,10 +168,10 @@ public static class PlotTools
     /// <param name="plotDlg">打印进度框对象</param>
     public static void StartSheetProgress(this PlotProgressDialog plotDlg)
     {
-        plotDlg.LowerSheetProgressRange = 0;//开始的打印进度
-        plotDlg.UpperSheetProgressRange = 100;//线束时的打印进度
-        plotDlg.SheetProgressPos = 0;//当前进度为0,表示开始
-        plotDlg.OnBeginSheet();//图纸打印开始,进度框开始工作            
+        plotDlg.LowerSheetProgressRange = 0;// 开始的打印进度
+        plotDlg.UpperSheetProgressRange = 100;// 线束时的打印进度
+        plotDlg.SheetProgressPos = 0;// 当前进度为0,表示开始
+        plotDlg.OnBeginSheet();// 图纸打印开始,进度框开始工作            
     }
     /// <summary>
     /// 终止打印图纸进程
@@ -179,8 +179,8 @@ public static class PlotTools
     /// <param name="plotDlg">打印进度框对象</param>
     public static void EndSheetProgress(this PlotProgressDialog plotDlg)
     {
-        plotDlg.SheetProgressPos = 100;//设置当前进度为100
-        plotDlg.OnEndSheet();//图纸打印结束,进度框停止工作
+        plotDlg.SheetProgressPos = 100;// 设置当前进度为100
+        plotDlg.OnEndSheet();// 图纸打印结束,进度框停止工作
     }
     /// <summary>
     /// 启动打印进度框
@@ -190,20 +190,20 @@ public static class PlotTools
     public static void StartPlotProgress(this PlotProgressDialog plotDlg, bool isPreview)
     {
         Document doc = Acap.DocumentManager.MdiActiveDocument;
-        //获取去除扩展名后的文件名（不含路径）
+        // 获取去除扩展名后的文件名（不含路径）
         string plotFileName = SymbolUtilityServices.GetSymbolNameFromPathName(doc.Name, "dwg");
-        //设置打印进度框中的提示信息
+        // 设置打印进度框中的提示信息
         string dialogTitle = isPreview ? "预览作业进度" : "打印作业进度";
         plotDlg.set_PlotMsgString(PlotMessageIndex.DialogTitle, dialogTitle);
         plotDlg.set_PlotMsgString(PlotMessageIndex.SheetProgressCaption, "正在处理图纸:" + plotFileName);
         plotDlg.set_PlotMsgString(PlotMessageIndex.CancelJobButtonMessage, "取消打印任务");
         plotDlg.set_PlotMsgString(PlotMessageIndex.CancelSheetButtonMessage, "取消文档");
         plotDlg.set_PlotMsgString(PlotMessageIndex.SheetProgressCaption, "进度：");
-        plotDlg.LowerPlotProgressRange = 0;//开始的打印进度
-        plotDlg.UpperPlotProgressRange = 100;//线束时的打印进度
-        plotDlg.PlotProgressPos = 0;//当前进度为0,表示开始
-        plotDlg.OnBeginPlot();//打印开始,进程框开始工作
-        plotDlg.IsVisible = true;//显示打印进度框
+        plotDlg.LowerPlotProgressRange = 0;// 开始的打印进度
+        plotDlg.UpperPlotProgressRange = 100;// 线束时的打印进度
+        plotDlg.PlotProgressPos = 0;// 当前进度为0,表示开始
+        plotDlg.OnBeginPlot();// 打印开始,进程框开始工作
+        plotDlg.IsVisible = true;// 显示打印进度框
     }
     /// <summary>
     /// 终止打印进度框
@@ -211,9 +211,9 @@ public static class PlotTools
     /// <param name="plotDlg">打印进度框对象</param>
     public static void EndPlotProgress(this PlotProgressDialog plotDlg)
     {
-        plotDlg.PlotProgressPos = 100;//设置当前进度为100
-        plotDlg.OnEndPlot();//结束打印
-        plotDlg.Dispose();//销毁打印进度框
+        plotDlg.PlotProgressPos = 100;// 设置当前进度为100
+        plotDlg.OnEndPlot();// 结束打印
+        plotDlg.Dispose();// 销毁打印进度框
     }
     /// <summary>
     /// 将打印设备及标准图纸尺寸清单存储到XML文件
@@ -221,36 +221,36 @@ public static class PlotTools
     /// <param name="fileName">XML文件名</param>
     public static void DeviceMeidaToXML(string fileName)
     {
-        XElement xroot = new XElement("Root");//创建一个XML根元素
-        //获取当前打印设备列表
+        XElement xroot = new XElement("Root");// 创建一个XML根元素
+        // 获取当前打印设备列表
         PlotSettingsValidator psv = PlotSettingsValidator.Current;
         StringCollection devices = psv.GetPlotDeviceList();
-        //创建打印设置对象,以获取设备拥有的图纸尺寸
+        // 创建打印设置对象,以获取设备拥有的图纸尺寸
         PlotSettings ps = new PlotSettings(true);
-        foreach (string device in devices)//遍历打印设备
+        foreach (string device in devices)// 遍历打印设备
         {
-            //创建一个名为Device的新元素
+            // 创建一个名为Device的新元素
             XElement xDevice = new XElement("Device");
-            //在Device元素下添加表示设备名称的属性
+            // 在Device元素下添加表示设备名称的属性
             xDevice.Add(new XAttribute("Name", device));
-            //更新打印设备、图纸尺寸,以反映当前系统状态。
+            // 更新打印设备、图纸尺寸,以反映当前系统状态。
             psv.SetPlotConfigurationName(ps, device, null);
             psv.RefreshLists(ps);
-            //获取打印设备的所有可用标准图纸尺寸的名称
+            // 获取打印设备的所有可用标准图纸尺寸的名称
             StringCollection medias = psv.GetCanonicalMediaNameList(ps);
             foreach (string media in medias)
             {
-                //如果为用户自定义图纸尺寸,则结束本次循环
+                // 如果为用户自定义图纸尺寸,则结束本次循环
                 if (media == "UserDefinedMetric") continue;
-                //创建一个名为Media的新元素
+                // 创建一个名为Media的新元素
                 XElement xMedia = new XElement("Media");
-                //在Media元素下添加表示图纸尺寸的属性
+                // 在Media元素下添加表示图纸尺寸的属性
                 xMedia.Add(new XAttribute("Name", media));
-                xDevice.Add(xMedia);//添加Media元素到Device元素中
+                xDevice.Add(xMedia);// 添加Media元素到Device元素中
             }
-            xroot.Add(xDevice);//添加Device元素到根元素中
+            xroot.Add(xDevice);// 添加Device元素到根元素中
         }
-        xroot.Save(fileName);//保存XML文件
+        xroot.Save(fileName);// 保存XML文件
     }
     /// <summary>
     /// 从XML文件中读取打印设备及标准图纸尺寸清单
@@ -261,14 +261,14 @@ public static class PlotTools
     public static List<string> MeidasFromXML(string fileName, string deviceName)
     {
         List<string> medias = new List<string>();
-        XElement xroot = XElement.Load(fileName);//载入XML文件
+        XElement xroot = XElement.Load(fileName);// 载入XML文件
         var devices = from d in xroot.Elements("Device")
                       where d.Attribute("Name").Value == deviceName
                       select d;
         if (devices.Count() != 1) return medias;
         medias = (from m in devices.First().Elements("Media")
                   select m.Attribute("Name").Value).ToList();
-        return medias;//返回标准图纸尺寸清单的字典对象
+        return medias;// 返回标准图纸尺寸清单的字典对象
     }
 
     /// <summary>
@@ -278,7 +278,7 @@ public static class PlotTools
     /// <returns>返回打印设备名列表</returns>
     public static List<string> DevicesFromXML(string fileName)
     {
-        XElement xroot = XElement.Load(fileName);//载入XML文件
+        XElement xroot = XElement.Load(fileName);// 载入XML文件
         List<string> devices = (from d in xroot.Elements("Device")
                                 select d.Attribute("Name").Value).ToList();
         return devices;
@@ -293,19 +293,19 @@ public static class PlotTools
     {
         using var trSource = sourceDb.TransactionManager.StartTransaction();
         using var trDest = destdb.TransactionManager.StartTransaction();
-        //获取源图形数据库的打印设置字典
+        // 获取源图形数据库的打印设置字典
         var dict = trSource.GetObject(sourceDb.PlotSettingsDictionaryId, OpenMode.ForRead) as DBDictionary;
         if (dict != null && dict.Contains(plotSettingName))
         {
-            //获取指定名称的打印设置
+            // 获取指定名称的打印设置
             var settingsId = dict.GetAt(plotSettingName);
             var settings = trSource.GetObject(settingsId, OpenMode.ForRead) as PlotSettings;
             if (settings == null)
                 throw new ArgumentException(nameof(settings));
-            //新建一个打印设置对象
+            // 新建一个打印设置对象
             PlotSettings newSettings = new(settings.ModelType);
-            newSettings.CopyFrom(settings);//复制打印设置
-                                           //将新建的打印设置对象添加到目的数据库的打印设置字典中
+            newSettings.CopyFrom(settings);// 复制打印设置
+                                           // 将新建的打印设置对象添加到目的数据库的打印设置字典中
             newSettings.AddToPlotSettingsDictionary(destdb);
             trDest.AddNewlyCreatedDBObject(newSettings, true);
         }
@@ -321,21 +321,21 @@ public static class PlotTools
     {
         using var trSource = sourceDb.TransactionManager.StartTransaction();
         using var trDest = destdb.TransactionManager.StartTransaction();
-        //获取源图形数据库的打印设置字典
+        // 获取源图形数据库的打印设置字典
         var dict = trSource.GetObject(sourceDb.PlotSettingsDictionaryId, OpenMode.ForRead) as DBDictionary;
         if (dict == null)
             throw new ArgumentException(nameof(dict));
-        //对打印设置字典中的条目进行遍历
+        // 对打印设置字典中的条目进行遍历
         foreach (DBDictionaryEntry entry in dict)
         {
-            //获取指定名称的打印设置
+            // 获取指定名称的打印设置
             var settings = trSource.GetObject(entry.Value, OpenMode.ForRead) as PlotSettings;
             if (settings == null)
                 throw new ArgumentException(nameof(settings));
-            //新建一个打印设置对象
+            // 新建一个打印设置对象
             PlotSettings newSettings = new(settings.ModelType);
-            newSettings.CopyFrom(settings);//复制打印设置
-                                           //将新建的打印设置对象添加到目的数据库的打印设置字典中
+            newSettings.CopyFrom(settings);// 复制打印设置
+                                           // 将新建的打印设置对象添加到目的数据库的打印设置字典中
             newSettings.AddToPlotSettingsDictionary(destdb);
             trDest.AddNewlyCreatedDBObject(newSettings, true);
         }

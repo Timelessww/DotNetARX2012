@@ -170,30 +170,30 @@ public static class RegionTools
     /// <returns>返回创建的面域列表</returns>
     public static List<Region>? CreateRegion(params Curve[] curves)
     {
-        //新建面域列表,存储创建的面域
+        // 新建面域列表,存储创建的面域
         List<Region> regionList = new();
-        //将可变数组转化为集合类,用于面域的创建
+        // 将可变数组转化为集合类,用于面域的创建
         DBObjectCollection curveCollection = new();
-        foreach (Curve curve in curves)//遍历曲线
+        foreach (Curve curve in curves)// 遍历曲线
         {
-            //如果曲线已经被加入到数据库且为写的状态,则返回
+            // 如果曲线已经被加入到数据库且为写的状态,则返回
             if (!curve.IsNewObject && curve.IsWriteEnabled)
                 return null;
-            curveCollection.Add(curve);//将曲线添加到集合中
+            curveCollection.Add(curve);// 将曲线添加到集合中
         }
         try
         {
-            //根据曲线集合,在内存中创建面域对象集合
+            // 根据曲线集合,在内存中创建面域对象集合
             var regionObjs = Region.CreateFromCurves(curveCollection);
-            //将面域对象集合复制到面域列表
+            // 将面域对象集合复制到面域列表
             foreach (Region region in regionObjs)
                 regionList.Add(region);
             return regionList;
         }
-        catch //面域创建失败
+        catch // 面域创建失败
         {
-            regionList.Clear();//清空面域列表
-            return regionList;//返回空的面域列表
+            regionList.Clear();// 清空面域列表
+            return regionList;// 返回空的面域列表
         }
     }
 }

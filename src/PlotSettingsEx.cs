@@ -21,7 +21,7 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     }
     #endregion
 
-    //获取当前打印设置验证类
+    // 获取当前打印设置验证类
     private readonly PlotSettingsValidator validator = PlotSettingsValidator.Current;
 
     /// <summary>
@@ -30,8 +30,8 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     /// <param name="ps">已有打印设置</param>
     public PlotSettingsEx(PlotSettings ps) : base(ps.ModelType)
     {
-        this.CopyFrom(ps);//从已有打印设置中获取打印设置
-        //更新打印设备、图纸尺寸和打印样式表信息
+        this.CopyFrom(ps);// 从已有打印设置中获取打印设置
+        // 更新打印设备、图纸尺寸和打印样式表信息
         validator.RefreshLists(this);
     }
 
@@ -43,19 +43,19 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     {
         get
         {
-            //将图纸尺寸从英文名改为中文名
+            // 将图纸尺寸从英文名改为中文名
             string mediaLocal = base.CanonicalMediaName.Replace("_", " ").Replace("MM", "毫米").Replace("Inches", "英寸").Replace("Pixels", "像素");
-            return mediaLocal;//返回中文名的图纸尺寸 
+            return mediaLocal;// 返回中文名的图纸尺寸 
         }
         set
         {
-            if (value != CanonicalMediaName)//如果图纸尺寸有变化
+            if (value != CanonicalMediaName)// 如果图纸尺寸有变化
             {
-                //将图纸尺寸从中文名改为英文名
+                // 将图纸尺寸从中文名改为英文名
                 string mediaName = value.Replace(" ", "_").Replace("毫米", "MM").Replace("英寸", "Inches").Replace("像素", "Pixels");
-                //设置当前图纸尺寸
+                // 设置当前图纸尺寸
                 validator.SetCanonicalMediaName(this, mediaName);
-                //向客户端发出某一属性值已更改的通知
+                // 向客户端发出某一属性值已更改的通知
                 NotifyPropertyChanged("CanonicalMediaName");
             }
         }
@@ -414,9 +414,9 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     {
         get
         {
-            if (ModelType)//模型空间
+            if (ModelType)// 模型空间
                 return (new List<string> { "窗口", "图形界限", "显示" });
-            else//图纸空间
+            else// 图纸空间
                 return (new List<string> { "布局", "窗口", "范围", "显示" });
         }
     }
@@ -616,9 +616,9 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     {
         get
         {
-            //如果未选择打印设备,则直接返回
+            // 如果未选择打印设备,则直接返回
             if (PlotConfigurationName == "无") return false;
-            //获取当前打印配置,并返回其是否打印到文件属性
+            // 获取当前打印配置,并返回其是否打印到文件属性
             PlotConfig config = PlotConfigManager.CurrentConfig;
             return config.IsPlotToFile;
         }
@@ -630,9 +630,9 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
     {
         get
         {
-            //如果未选择打印设备,则直接返回
+            // 如果未选择打印设备,则直接返回
             if (PlotConfigurationName == "无") return false;
-            //获取当前打印配置,并返回其是否必须打印到文件
+            // 获取当前打印配置,并返回其是否必须打印到文件
             PlotConfig config = PlotConfigManager.CurrentConfig;
             if (config.PlotToFileCapability == PlotToFileCapability.MustPlotToFile)
                 return false;
@@ -684,7 +684,7 @@ public class PlotSettingsEx : PlotSettings, INotifyPropertyChanged
         {
             var ps = psId.GetObject(OpenMode.ForWrite) as PlotSettings;
             if (ps != null)
-                ps.CopyFrom(this);//复制当前打印设置
+                ps.CopyFrom(this);// 复制当前打印设置
             trans.Commit();
         }
     }

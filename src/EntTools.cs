@@ -13,13 +13,13 @@ public static class EntTools
     /// <param name="targetPt">移动的目标点</param>
     public static void Move(this ObjectId id, Point3d sourcePt, Point3d targetPt)
     {
-        //构建用于移动实体的矩阵
+        // 构建用于移动实体的矩阵
         Vector3d vector = targetPt.GetVectorTo(sourcePt);
         Matrix3d mt = Matrix3d.Displacement(vector);
-        //以写的方式打开id表示的实体对象
+        // 以写的方式打开id表示的实体对象
         Entity ent = (Entity)id.GetObject(OpenMode.ForWrite);
-        ent.TransformBy(mt);//对实体实施移动
-        ent.DowngradeOpen();//为防止错误,切换实体为读的状态
+        ent.TransformBy(mt);// 对实体实施移动
+        ent.DowngradeOpen();// 为防止错误,切换实体为读的状态
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public static class EntTools
             // 构建用于移动实体的矩阵
             Vector3d vector = targetPt.GetVectorTo(sourcePt);
             Matrix3d mt = Matrix3d.Displacement(vector);
-            ent.TransformBy(mt);//对实体实施移动
+            ent.TransformBy(mt);// 对实体实施移动
         }
         else // 如果是已经添加到数据库中的实体
         {
@@ -52,16 +52,16 @@ public static class EntTools
     /// <returns>返回复制实体的ObjectId</returns>
     public static ObjectId Copy(this ObjectId id, Point3d sourcePt, Point3d targetPt)
     {
-        //构建用于复制实体的矩阵
+        // 构建用于复制实体的矩阵
         Vector3d vector = targetPt.GetVectorTo(sourcePt);
         Matrix3d mt = Matrix3d.Displacement(vector);
-        //获取id表示的实体对象
+        // 获取id表示的实体对象
         Entity ent = (Entity)id.GetObject(OpenMode.ForRead);
-        //获取实体的拷贝
+        // 获取实体的拷贝
         Entity entCopy = ent.GetTransformedCopy(mt);
-        //将复制的实体对象添加到模型空间
+        // 将复制的实体对象添加到模型空间
         ObjectId copyId = id.Database.AddToModelSpace(entCopy);
-        return copyId; //返回复制实体的ObjectId
+        return copyId; // 返回复制实体的ObjectId
     }
 
     /// <summary>
@@ -76,19 +76,19 @@ public static class EntTools
         ObjectId copyId;
         if (ent.IsNewObject) // 如果是还未被添加到数据库中的新实体
         {
-            //构建用于复制实体的矩阵
+            // 构建用于复制实体的矩阵
             Vector3d vector = targetPt.GetVectorTo(sourcePt);
             Matrix3d mt = Matrix3d.Displacement(vector);
-            //获取实体的拷贝
+            // 获取实体的拷贝
             Entity entCopy = ent.GetTransformedCopy(mt);
-            //将复制的实体对象添加到模型空间
+            // 将复制的实体对象添加到模型空间
             copyId = ent.Database.AddToModelSpace(entCopy);
         }
         else
         {
             copyId = ent.ObjectId.Copy(sourcePt, targetPt);
         }
-        return copyId; //返回复制实体的ObjectId
+        return copyId; // 返回复制实体的ObjectId
     }
 
     /// <summary>
@@ -170,14 +170,14 @@ public static class EntTools
     /// <returns>返回镜像实体的ObjectId</returns>
     public static ObjectId Mirror(this ObjectId id, Point3d mirrorPt1, Point3d mirrorPt2, bool eraseSourceObject)
     {
-        Line3d miLine = new Line3d(mirrorPt1, mirrorPt2);//镜像线
-        Matrix3d mt = Matrix3d.Mirroring(miLine);        //镜像矩阵
+        Line3d miLine = new Line3d(mirrorPt1, mirrorPt2);// 镜像线
+        Matrix3d mt = Matrix3d.Mirroring(miLine);        // 镜像矩阵
         ObjectId mirrorId = id;
         Entity ent = (Entity)id.GetObject(OpenMode.ForWrite);
-        //如果删除源对象,则直接对源对象实行镜像变换
+        // 如果删除源对象,则直接对源对象实行镜像变换
         if (eraseSourceObject == true)
             ent.TransformBy(mt);
-        else //如果不删除源对象,则镜像复制源对象
+        else // 如果不删除源对象,则镜像复制源对象
         {
             Entity entCopy = ent.GetTransformedCopy(mt);
             mirrorId = id.Database.AddToModelSpace(entCopy);
@@ -195,15 +195,15 @@ public static class EntTools
     /// <returns>返回镜像实体的ObjectId</returns>
     public static ObjectId Mirror(this Entity ent, Point3d mirrorPt1, Point3d mirrorPt2, bool eraseSourceObject)
     {
-        Line3d miLine = new Line3d(mirrorPt1, mirrorPt2);//镜像线
-        Matrix3d mt = Matrix3d.Mirroring(miLine);        //镜像矩阵
+        Line3d miLine = new Line3d(mirrorPt1, mirrorPt2);// 镜像线
+        Matrix3d mt = Matrix3d.Mirroring(miLine);        // 镜像矩阵
         ObjectId mirrorId = ObjectId.Null;
         if (ent.IsNewObject)
         {
-            //如果删除源对象,则直接对源对象实行镜像变换
+            // 如果删除源对象,则直接对源对象实行镜像变换
             if (eraseSourceObject == true)
                 ent.TransformBy(mt);
-            else //如果不删除源对象,则镜像复制源对象
+            else // 如果不删除源对象,则镜像复制源对象
             {
                 Entity entCopy = ent.GetTransformedCopy(mt);
                 mirrorId = ent.Database.AddToModelSpace(entCopy);
@@ -230,19 +230,19 @@ public static class EntTools
             throw new ArgumentException("无法偏移");
         try
         {
-            //获取偏移的对象集合
+            // 获取偏移的对象集合
             var offsetCurves = cur.GetOffsetCurves(dis);
-            //将对象集合类型转换为实体类的数组,以方便加入实体的操作
+            // 将对象集合类型转换为实体类的数组,以方便加入实体的操作
             var offsetEnts = new Entity[offsetCurves.Count];
             offsetCurves.CopyTo(offsetEnts, 0);
-            //将偏移的对象加入到数据库
+            // 将偏移的对象加入到数据库
             ids = id.Database.AddToModelSpace(offsetEnts);
         }
         catch
         {
             Application.ShowAlertDialog("无法偏移！");
         }
-        return ids;//返回偏移后的实体Id集合
+        return ids;// 返回偏移后的实体Id集合
     }
 
     /// <summary>

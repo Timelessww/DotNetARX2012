@@ -12,9 +12,9 @@ public static class CUITools
     /// <returns>返回主CUI文件</returns>
     public static CustomizationSection GetMainCustomizationSection(this Document doc)
     {
-        //获得主CUI文件所在的位置
+        // 获得主CUI文件所在的位置
         string mainCuiFile = Application.GetSystemVariable("MENUNAME") + ".cui";
-        //打开主CUI文件
+        // 打开主CUI文件
         return new CustomizationSection(mainCuiFile);
     }
 
@@ -27,16 +27,16 @@ public static class CUITools
     /// <returns>返回创建的CUI文件</returns>
     public static CustomizationSection AddCui(this Document doc, string cuiFile, string menuGroupName)
     {
-        CustomizationSection cs;//声明CUI文件对象
-        if (!File.Exists(cuiFile))//如果要创建的文件不存在
+        CustomizationSection cs;// 声明CUI文件对象
+        if (!File.Exists(cuiFile))// 如果要创建的文件不存在
         {
-            cs = new CustomizationSection();//创建CUI文件对象
-            cs.MenuGroupName = menuGroupName;//指定菜单组名称
-            cs.SaveAs(cuiFile);//保存CUI文件
+            cs = new CustomizationSection();// 创建CUI文件对象
+            cs.MenuGroupName = menuGroupName;// 指定菜单组名称
+            cs.SaveAs(cuiFile);// 保存CUI文件
         }
-        //如果已经存在指定的CUI文件,则打开该文件
+        // 如果已经存在指定的CUI文件,则打开该文件
         else cs = new CustomizationSection(cuiFile);
-        return cs;//返回CUI文件对象
+        return cs;// 返回CUI文件对象
     }
 
     /// <summary>
@@ -45,24 +45,24 @@ public static class CUITools
     /// <param name="cs">CUI文件</param>
     public static void LoadCui(this CustomizationSection cs)
     {
-        if (cs.IsModified) cs.Save();//如果CUI文件被修改,则保存
-        //保存CMDECHO及FILEDIA系统变量
+        if (cs.IsModified) cs.Save();// 如果CUI文件被修改,则保存
+        // 保存CMDECHO及FILEDIA系统变量
         object oldCmdEcho = Application.GetSystemVariable("CMDECHO");
         object oldFileDia = Application.GetSystemVariable("FILEDIA");
-        //设置CMDECHO=0,控制不在命令行上回显提示和输入信息
+        // 设置CMDECHO=0,控制不在命令行上回显提示和输入信息
         Application.SetSystemVariable("CMDECHO", 0);
-        //设置FILEDIA=0,禁止显示文件对话框,这样可以通过程序输入文件名
+        // 设置FILEDIA=0,禁止显示文件对话框,这样可以通过程序输入文件名
         Application.SetSystemVariable("FILEDIA", 0);
-        //获取当前活动文档
+        // 获取当前活动文档
         Document doc = Acap.DocumentManager.MdiActiveDocument;
-        //获取主CUI文件
+        // 获取主CUI文件
         CustomizationSection mainCs = doc.GetMainCustomizationSection();
-        //如果已存在局部CUI文件,则先卸载
+        // 如果已存在局部CUI文件,则先卸载
         if (mainCs.PartialCuiFiles.Contains(cs.CUIFileName))
             doc.SendStringToExecute("_.cuiunload " + cs.CUIFileBaseName + " ", false, false, false);
-        //装载CUI文件,注意文件名必须是带路径的
+        // 装载CUI文件,注意文件名必须是带路径的
         doc.SendStringToExecute("_.cuiload " + cs.CUIFileName + " ", false, false, false);
-        //恢复CMDECHO及FILEDIA系统变量的初始值
+        // 恢复CMDECHO及FILEDIA系统变量的初始值
         doc.SendStringToExecute("(setvar \"FILEDIA\" " + oldFileDia.ToString() + ")(princ) ", false, false, false);
         doc.SendStringToExecute("(setvar \"CMDECHO\" " + oldCmdEcho.ToString() + ")(princ) ", false, false, false);
     }
@@ -79,22 +79,22 @@ public static class CUITools
     /// <returns>返回创建的宏</returns>
     public static MenuMacro? AddMacro(this CustomizationSection source, string name, string command, string tag, string helpString, string imagePath)
     {
-        var menuGroup = source.MenuGroup;//获取CUI文件中的菜单组
-        //判断菜单组中是否已经定义与菜单组名相同的宏集合
+        var menuGroup = source.MenuGroup;// 获取CUI文件中的菜单组
+        // 判断菜单组中是否已经定义与菜单组名相同的宏集合
         var mg = menuGroup.FindMacroGroup(menuGroup.Name);
-        if (mg == null)//如果宏集合没有定义,则创建一个与菜单组名相同的宏集合
+        if (mg == null)// 如果宏集合没有定义,则创建一个与菜单组名相同的宏集合
             mg = new MacroGroup(menuGroup.Name, menuGroup);
-        //如果已经宏已经被定义,则返回
+        // 如果已经宏已经被定义,则返回
         foreach (MenuMacro macro in mg.MenuMacros)
             if (macro.ElementID == tag)
                 return null;
-        //在宏集合中创建一个命令宏
+        // 在宏集合中创建一个命令宏
         var MenuMacro = new MenuMacro(mg, name, command, tag);
-        //指定命令宏的说明信息,在状态栏中显示
+        // 指定命令宏的说明信息,在状态栏中显示
         MenuMacro.macro.HelpString = helpString;
-        //指定命令宏的大小图像的路径
+        // 指定命令宏的大小图像的路径
         MenuMacro.macro.LargeImage = MenuMacro.macro.SmallImage = imagePath;
-        return MenuMacro;//返回命令宏
+        return MenuMacro;// 返回命令宏
     }
 
     /// <summary>
@@ -107,14 +107,14 @@ public static class CUITools
     /// <returns>返回下拉菜单对象</returns>
     public static PopMenu? AddPopMenu(this MenuGroup menuGroup, string name, StringCollection aliasList, string tag)
     {
-        PopMenu? pm = null;//声明下拉菜单对象
-        //如果菜单组中没有名称为name的下拉菜单
+        PopMenu? pm = null;// 声明下拉菜单对象
+        // 如果菜单组中没有名称为name的下拉菜单
         if (menuGroup.PopMenus.IsNameFree(name))
         {
-            //为下拉菜单指定显示名称、别名、标识符和所属的菜单组
+            // 为下拉菜单指定显示名称、别名、标识符和所属的菜单组
             pm = new PopMenu(name, aliasList, tag, menuGroup);
         }
-        return pm;//返回下拉菜单对象
+        return pm;// 返回下拉菜单对象
     }
 
     /// <summary>
@@ -128,15 +128,15 @@ public static class CUITools
     public static PopMenuItem? AddMenuItem(this PopMenu parentMenu, int index, string name, string macroId)
     {
         PopMenuItem? newPmi = null;
-        //如果存在名为name的菜单项,则返回
+        // 如果存在名为name的菜单项,则返回
         foreach (PopMenuItem pmi in parentMenu.PopMenuItems)
             if (pmi.Name == name) return newPmi;
-        //定义一个菜单项对象,指定所属的菜单及位置
+        // 定义一个菜单项对象,指定所属的菜单及位置
         newPmi = new PopMenuItem(parentMenu, index);
-        ////如果name不为空,则指定菜单项的显示名为name,否则会使用命令宏的名称
+        //// 如果name不为空,则指定菜单项的显示名为name,否则会使用命令宏的名称
         if (name != null) newPmi.Name = name;
-        newPmi.MacroID = macroId;//菜单项的命令宏的ID
-        return newPmi;//返回菜单项对象
+        newPmi.MacroID = macroId;// 菜单项的命令宏的ID
+        return newPmi;// 返回菜单项对象
     }
 
     /// <summary>
@@ -149,16 +149,16 @@ public static class CUITools
     /// <returns>返回添加的子菜单</returns>
     public static PopMenu? AddSubMenu(this PopMenu parentMenu, int index, string name, string tag)
     {
-        PopMenu? pm = null;//声明子菜单对象（属于下拉菜单类）
-        //如果菜单组中没有名称为name的下拉菜单
+        PopMenu? pm = null;// 声明子菜单对象（属于下拉菜单类）
+        // 如果菜单组中没有名称为name的下拉菜单
         if (parentMenu.CustomizationSection.MenuGroup.PopMenus.IsNameFree(name))
         {
-            //为子菜单指定显示名称、标识符和所属的菜单组,别名设为null
+            // 为子菜单指定显示名称、标识符和所属的菜单组,别名设为null
             pm = new PopMenu(name, null, tag, parentMenu.CustomizationSection.MenuGroup);
-            //为子菜单指定其所属的菜单
-            //PopMenuRef menuRef=new PopMenuRef(pm, parentMenu, index);
+            // 为子菜单指定其所属的菜单
+            // PopMenuRef menuRef=new PopMenuRef(pm, parentMenu, index);
         }
-        return pm;//返回子菜单对象
+        return pm;// 返回子菜单对象
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public static class CUITools
     /// <returns>返回添加的分隔条</returns>
     public static PopMenuItem AddSeparator(this PopMenu parentMenu, int index)
     {
-        //定义一个分隔条并返回
+        // 定义一个分隔条并返回
         return new PopMenuItem(parentMenu, index);
     }
 
@@ -181,20 +181,20 @@ public static class CUITools
     /// <returns>返回添加的工具栏</returns>
     public static Toolbar? AddToolbar(this MenuGroup menuGroup, string name)
     {
-        Toolbar? tb = null;//声明一个工具栏对象
-        //如果菜单组中没有名称为name的工具栏
+        Toolbar? tb = null;// 声明一个工具栏对象
+        // 如果菜单组中没有名称为name的工具栏
         if (menuGroup.Toolbars.IsNameFree(name))
         {
-            //为工具栏指定显示名称和所属的菜单组
+            // 为工具栏指定显示名称和所属的菜单组
             tb = new Toolbar(name, menuGroup)
             {
-                //设置工具栏为浮动工具栏
+                // 设置工具栏为浮动工具栏
                 ToolbarOrient = ToolbarOrient.floating,
-                //设置工具栏可见
+                // 设置工具栏可见
                 ToolbarVisible = ToolbarVisible.show
             };
         }
-        return tb;//返回工具栏对象
+        return tb;// 返回工具栏对象
     }
 
     /// <summary>
@@ -207,9 +207,9 @@ public static class CUITools
     /// <returns>返回工具栏按钮对象</returns>
     public static ToolbarButton AddToolbarButton(this Toolbar parent, int index, string name, string macroId)
     {
-        //创建一个工具栏按钮对象,指定其命令宏Id、显示名称、所属的工具栏和位置
+        // 创建一个工具栏按钮对象,指定其命令宏Id、显示名称、所属的工具栏和位置
         ToolbarButton button = new ToolbarButton(macroId, name, parent, index);
-        return button;//返回工具栏按钮对象
+        return button;// 返回工具栏按钮对象
     }
 
     /// <summary>
@@ -220,11 +220,11 @@ public static class CUITools
     /// <param name="toolbarRef">弹出式工具栏所引用的工具栏</param>
     public static void AttachToolbarToFlyout(this Toolbar parent, int index, Toolbar toolbarRef)
     {
-        //创建一个弹出式工具栏,指定其所属的工具栏和位置
+        // 创建一个弹出式工具栏,指定其所属的工具栏和位置
         ToolbarFlyout flyout = new ToolbarFlyout(parent, index);
-        //指定弹出式工具栏所引用的工具栏 
+        // 指定弹出式工具栏所引用的工具栏 
         flyout.ToolbarReference = toolbarRef.Name;
-        //引用的工具栏初始状态不可见
+        // 引用的工具栏初始状态不可见
         toolbarRef.ToolbarVisible = ToolbarVisible.hide;
     }
 }

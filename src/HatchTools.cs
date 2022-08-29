@@ -59,7 +59,7 @@ public class HatchPalletteDialog
     /// <summary>
     /// 获取用户选择的填充图案名称
     /// </summary>
-    public string? Pattern { get; private set; }//用于存储用户选择的填充图案名称
+    public string? Pattern { get; private set; }// 用于存储用户选择的填充图案名称
 
     /// <summary>
     /// 是否显示自定义标签
@@ -71,7 +71,7 @@ public class HatchPalletteDialog
     /// </summary>
     public HatchPalletteDialog()
     {
-        ShowCustom = true;//显示自定义标签
+        ShowCustom = true;// 显示自定义标签
     }
     /// <summary>
     /// 显示填充图案选项板
@@ -79,10 +79,10 @@ public class HatchPalletteDialog
     /// <returns>如果用户选择了填充图案,则返回true,否则返回false</returns>
     public bool ShowDialog()
     {
-        //显示填充图案选项板
+        // 显示填充图案选项板
         bool isOK = acedHatchPalletteDialog(HatchTools.CurrentPattern, ShowCustom, out IntPtr ptr/*用户选择的*/);
-        if (!isOK) return false;//如果用户未选择填充图案,返回false
-        //用户选择了填充图案,通过指针获得图案名称并将其置为当前名称
+        if (!isOK) return false;// 如果用户未选择填充图案,返回false
+        // 用户选择了填充图案,通过指针获得图案名称并将其置为当前名称
         Pattern = HatchTools.CurrentPattern = Marshal.PtrToStringAuto(ptr);
         return true;
     }
@@ -97,11 +97,11 @@ public static class HatchTools
     /// </summary>
     public static string CurrentPattern
     {
-        //获取HPNAME系统变量值,它表示默认的填充图案名
+        // 获取HPNAME系统变量值,它表示默认的填充图案名
         get { return Application.GetSystemVariable("HPNAME").ToString(); }
         set
         {
-            //如果要设置的值符合填充图案名,则设置HPNAME系统变量值
+            // 如果要设置的值符合填充图案名,则设置HPNAME系统变量值
             if (value.Length <= 34 && !value.Contains(" ") && !value.IsNullOrWhiteSpace() && value != CurrentPattern)
                 Application.SetSystemVariable("HPNAME", value);
         }
@@ -117,11 +117,11 @@ public static class HatchTools
     public static void CreateHatch(this Hatch hatch, HatchPatternType patternType, string patternName, bool associative)
     {
         Database db = HostApplicationServices.WorkingDatabase;
-        hatch.SetDatabaseDefaults();//设置填充的默认值
-        //设置填充的类型和填充图案名
+        hatch.SetDatabaseDefaults();// 设置填充的默认值
+        // 设置填充的类型和填充图案名
         hatch.SetHatchPattern(patternType, patternName);
-        db.AddToModelSpace(hatch);//将填充添加到模型空间
-        //设置填充与边界是否关联
+        db.AddToModelSpace(hatch);// 将填充添加到模型空间
+        // 设置填充与边界是否关联
         hatch.Associative = associative;
     }
 
@@ -135,22 +135,22 @@ public static class HatchTools
     /// <param name="associative">填充是否与边界关联</param>
     public static void CreateGradientHatch(this Hatch hatch, HatchGradientName gradientName, Color color1, Color color2, bool associative)
     {
-        //设置渐变色填充的类型所代表的字符串,用于将HatchGradientName枚举转换为对应的字符串
+        // 设置渐变色填充的类型所代表的字符串,用于将HatchGradientName枚举转换为对应的字符串
         string[] gradientNames = new string[] { "Linear","Cylinder","Invcylinder","Spherical",
                                                 "Invspherical","Hemisperical","InvHemisperical","Curved","Incurved"};
         var db = HostApplicationServices.WorkingDatabase;
-        hatch.SetDatabaseDefaults();//设置填充的默认值
-        //设置填充的类型为渐变色填充
+        hatch.SetDatabaseDefaults();// 设置填充的默认值
+        // 设置填充的类型为渐变色填充
         hatch.HatchObjectType = HatchObjectType.GradientObject;
-        //设置渐变色填充的类型和图案名称
+        // 设置渐变色填充的类型和图案名称
         hatch.SetGradient(GradientPatternType.PreDefinedGradient, gradientNames[(int)gradientName]);
-        //新建两个Color类对象,分别表示渐变色填充的起始和结束颜色
+        // 新建两个Color类对象,分别表示渐变色填充的起始和结束颜色
         GradientColor gColor1 = new(color1, 0);
         GradientColor gColor2 = new(color2, 1);
-        //设置渐变色填充的起始和结束颜色
+        // 设置渐变色填充的起始和结束颜色
         hatch.SetGradientColors(new GradientColor[] { gColor1, gColor2 });
-        db.AddToModelSpace(hatch);//将填充添加到模型空间
-        //设置填充与边界是否关联
+        db.AddToModelSpace(hatch);// 将填充添加到模型空间
+        // 设置填充与边界是否关联
         hatch.Associative = associative;
     }
 }

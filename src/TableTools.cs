@@ -30,13 +30,13 @@ public static class TableTools
         using (Transaction trans = db.TransactionManager.StartTransaction())
         {
             Table table = new Table();
-            //设置表格的行数和列数
+            // 设置表格的行数和列数
             table.SetSize(numRows, numCols);
-            //设置表格放置的位置
+            // 设置表格放置的位置
             table.Position = position;
-            //非常重要,根据当前样式更新表格,不加此句,会导致AutoCAD崩溃
+            // 非常重要,根据当前样式更新表格,不加此句,会导致AutoCAD崩溃
             table.GenerateLayout();
-            //表格添加到模型空间
+            // 表格添加到模型空间
             tableId = db.AddToModelSpace(table);
             trans.Commit();
         }
@@ -116,23 +116,23 @@ public static class TableTools
         ObjectId styleId;
         using (Transaction trans = db.TransactionManager.StartTransaction())
         {
-            //打开表格样式字典
+            // 打开表格样式字典
             DBDictionary dict = (DBDictionary)trans.GetObject(db.TableStyleDictionaryId, OpenMode.ForRead);
-            //判断是否存在指定的表格样式
+            // 判断是否存在指定的表格样式
             if (dict.Contains(styleName))
-                styleId = dict.GetAt(styleName);//如果存在则返回表格样式的Id
+                styleId = dict.GetAt(styleName);// 如果存在则返回表格样式的Id
             else
             {
-                //新建一个表格样式
+                // 新建一个表格样式
                 TableStyle style = new TableStyle();
-                dict.UpgradeOpen();//切换表格样式字典为写的状态
-                //将新的表格样式添加到样式字典并获取其 Id
+                dict.UpgradeOpen();// 切换表格样式字典为写的状态
+                // 将新的表格样式添加到样式字典并获取其 Id
                 styleId = dict.SetAt(styleName, style);
-                //将新建的表格样式添加到事务处理中
+                // 将新建的表格样式添加到事务处理中
                 trans.AddNewlyCreatedDBObject(style, true);
                 trans.Commit();
             }
         }
-        return styleId;//返回表格样式的Id
+        return styleId;// 返回表格样式的Id
     }
 }
