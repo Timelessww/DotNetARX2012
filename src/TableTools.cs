@@ -8,13 +8,7 @@ public static class TableTools
     /// <summary>
     /// 所有行的标志位（包括标题行、数据行）
     /// </summary>
-    public static int AllRows
-    {
-        get
-        {
-            return (int)(RowType.DataRow | RowType.HeaderRow | RowType.TitleRow);
-        }
-    }
+    public static int AllRows => (int)(RowType.DataRow | RowType.HeaderRow | RowType.TitleRow);
 
     /// <summary>
     /// 创建表格
@@ -97,7 +91,7 @@ public static class TableTools
     public static bool SetRowTextString(this Table table, int rowIndex, params string[] data)
     {
 #pragma warning disable CS0618 // 类型或成员已过时
-        if (data.Length > table.NumColumns) 
+        if (data.Length > table.NumColumns)
             return false;
         for (int j = 0; j < data.Length; j++)
             table.SetTextString(rowIndex, j, data[j]);
