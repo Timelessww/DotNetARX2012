@@ -78,7 +78,7 @@ public class TypedValueList : List<TypedValue>
     /// TypedValueList隐式转换为ResultBuffer
     /// </summary>
     /// <param name="src">要转换的TypedValueList对象</param>
-    /// <returns>返回对应的ResultBuffer对象</returns>
+    /// <returns>返回对应的ResultBuffer对象,要加using</returns>
     public static implicit operator ResultBuffer(TypedValueList src)
     {
         if (src == null)
@@ -133,7 +133,6 @@ public class TypedValueList : List<TypedValue>
             throw new ArgumentNullException(nameof(src));
         return new TypedValueList(src.AsArray());
     }
-
 }
 
 /// <summary>

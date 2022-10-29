@@ -41,10 +41,9 @@ public static class UCSTools
     public static Point3d TranslateCoordinates(this Point3d pt, CoordSystem from, CoordSystem to, int disp)
     {
         double[] result = new double[3];
-        _ = acedTrans(pt.ToArray(),
-            new ResultBuffer(new TypedValue(5003, from)).UnmanagedObject,
-            new ResultBuffer(new TypedValue(5003, to)).UnmanagedObject,
-            disp, result);
+        using ResultBuffer f = new(new TypedValue(5003, from));
+        using ResultBuffer t = new(new TypedValue(5003, to));
+        _ = acedTrans(pt.ToArray(), f.UnmanagedObject, t.UnmanagedObject, disp, result);
         return new Point3d(result);
     }
 
@@ -70,7 +69,7 @@ public static class UCSTools
     {
         var trans = db.TransactionManager;
         // 打开UCS表
-        UcsTable ut = (UcsTable)trans.GetObject(db.UcsTableId, OpenMode.ForRead);
+        var ut = (UcsTable)trans.GetObject(db.UcsTableId, OpenMode.ForRead);
         if (!ut.Has(UCSName))// 如果不存在名为UCSName的UCS,则新建一个UCS
         {
             // 定义一个新的UCS
