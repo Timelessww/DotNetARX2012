@@ -50,11 +50,11 @@ public enum HatchGradientName
 /// </summary>
 public class HatchPalletteDialog
 {
-#pragma warning disable CA2101 // 指定对 P/Invoke 字符串参数进行封送处理
+    // 填充对话框
+    // https://www.keanw.com/2007/03/showing_autocad.html
     [SuppressUnmanagedCodeSecurity]
     [DllImport("acad.exe", EntryPoint = "?acedHatchPalletteDialog@@YA_NPB_W_NAAPA_W@Z", CharSet = CharSet.Auto)]
     static extern bool acedHatchPalletteDialog(string currentPattern, bool showCustom, out IntPtr newPattern);
-#pragma warning restore CA2101 // 指定对 P/Invoke 字符串参数进行封送处理
 
     /// <summary>
     /// 获取用户选择的填充图案名称
@@ -64,15 +64,8 @@ public class HatchPalletteDialog
     /// <summary>
     /// 是否显示自定义标签
     /// </summary>
-    public bool ShowCustom;
+    public bool ShowCustom = true;
 
-    /// <summary>
-    /// 构造函数,在填充图案选项板中显示自定义标签
-    /// </summary>
-    public HatchPalletteDialog()
-    {
-        ShowCustom = true;// 显示自定义标签
-    }
     /// <summary>
     /// 显示填充图案选项板
     /// </summary>
@@ -81,12 +74,16 @@ public class HatchPalletteDialog
     {
         // 显示填充图案选项板
         bool isOK = acedHatchPalletteDialog(HatchTools.CurrentPattern, ShowCustom, out IntPtr ptr/*用户选择的*/);
-        if (!isOK) return false;// 如果用户未选择填充图案,返回false
+
+        if (!isOK)
+            return false;// 用户未选择填充图案
+
         // 用户选择了填充图案,通过指针获得图案名称并将其置为当前名称
         Pattern = HatchTools.CurrentPattern = Marshal.PtrToStringAuto(ptr);
         return true;
     }
 }
+
 /// <summary>
 /// 填充操作类
 /// </summary>
@@ -97,13 +94,16 @@ public static class HatchTools
     /// </summary>
     public static string CurrentPattern
     {
-        // 获取HPNAME系统变量值,它表示默认的填充图案名
-        get { return Application.GetSystemVariable("HPNAME").ToString(); }
+        /// 获取 HPNAME 系统变量值,它表示默认的填充图案名
+        get => Acap.GetSystemVariable("HPNAME").ToString();
         set
         {
             // 如果要设置的值符合填充图案名,则设置HPNAME系统变量值
-            if (value.Length <= 34 && !value.Contains(" ") && !value.IsNullOrWhiteSpace() && value != CurrentPattern)
-                Application.SetSystemVariable("HPNAME", value);
+            if (value.Length <= 34
+                && !value.Contains(" ")
+                && !value.IsNullOrWhiteSpace()
+                && value != CurrentPattern)
+                Acap.SetSystemVariable("HPNAME", value);
         }
     }
 
