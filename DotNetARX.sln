@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetARX", "DotNetARX.csproj", "{5DDFCADA-BEA4-402C-B3E4-5C7F83C2F09E}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet", "src\DotNet.csproj", "{A93AC167-6C67-4F65-9764-42B1E923174B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5DDFCADA-BEA4-402C-B3E4-5C7F83C2F09E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DDFCADA-BEA4-402C-B3E4-5C7F83C2F09E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DDFCADA-BEA4-402C-B3E4-5C7F83C2F09E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DDFCADA-BEA4-402C-B3E4-5C7F83C2F09E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93AC167-6C67-4F65-9764-42B1E923174B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93AC167-6C67-4F65-9764-42B1E923174B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93AC167-6C67-4F65-9764-42B1E923174B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93AC167-6C67-4F65-9764-42B1E923174B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {175ECCB0-945D-4083-B3BF-1769C90AC02B}
 	EndGlobalSection
 EndGlobal
